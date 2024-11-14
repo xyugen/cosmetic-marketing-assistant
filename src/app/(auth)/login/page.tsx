@@ -7,6 +7,7 @@ import Link from "next/link";
 import HeroSection from "../_components/hero-section";
 import OrDivider from "../_components/or-divider";
 import SocialsAuth from "../_components/socials-auth";
+import PasswordInput from "@/components/forms/password-input";
 
 const Page = () => {
   return (
@@ -42,7 +43,7 @@ const Page = () => {
                     type="email"
                     placeholder="Email"
                     id="email"
-                  ></Input>
+                  />
                 </div>
               </div>
 
@@ -63,12 +64,11 @@ const Page = () => {
                   </a>
                 </div>
                 <div className="mt-2">
-                  <Input
+                  <PasswordInput
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                    type="password"
                     placeholder="Password"
                     id="password"
-                  ></Input>
+                  />
                 </div>
               </div>
               <div>

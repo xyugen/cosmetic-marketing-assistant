@@ -7,6 +7,7 @@ import Link from "next/link";
 import HeroSection from "../_components/hero-section";
 import OrDivider from "../_components/or-divider";
 import SocialsAuth from "../_components/socials-auth";
+import PasswordInput from "@/components/forms/password-input";
 
 const Page = () => {
   return (
@@ -31,7 +32,7 @@ const Page = () => {
             <div className="space-y-5">
               <div>
                 <Label
-                  htmlFor="email"
+                  htmlFor="full-name"
                   className="text-base font-medium text-gray-900"
                 >
                   Full Name
@@ -39,10 +40,10 @@ const Page = () => {
                 <div className="mt-2">
                   <Input
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                    type="email"
-                    placeholder="Email"
-                    id="email"
-                  ></Input>
+                    type="text"
+                    placeholder="Full Name"
+                    id="full-name"
+                  />
                 </div>
               </div>
 
@@ -59,7 +60,7 @@ const Page = () => {
                     type="email"
                     placeholder="Email"
                     id="email"
-                  ></Input>
+                  />
                 </div>
               </div>
 
@@ -71,21 +72,29 @@ const Page = () => {
                   >
                     Password
                   </Label>
-                  <a
-                    href="#"
-                    title=""
-                    className="text-sm font-semibold text-black hover:underline"
-                  >
-                    Forgot password?
-                  </a>
                 </div>
                 <div className="mt-2">
-                  <Input
+                  <PasswordInput
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                    type="password"
                     placeholder="Password"
                     id="password"
-                  ></Input>
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label
+                  htmlFor="confirm-password"
+                  className="text-base font-medium text-gray-900"
+                >
+                  Confirm password
+                </Label>
+                <div className="mt-2">
+                  <PasswordInput
+                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                    placeholder="Confirm Password"
+                    id="confirm-password"
+                  />
                 </div>
               </div>
               <div>
