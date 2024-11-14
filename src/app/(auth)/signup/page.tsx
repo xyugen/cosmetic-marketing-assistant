@@ -2,31 +2,48 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PageRoutes } from "@/constants/page-routes";
-import { Facebook, Mail } from "lucide-react";
+import { Facebook, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const Page = () => {
   return (
     <div className="grid h-screen lg:grid-cols-2">
-      {/* Login section */}
-      <section className="flex flex-col items-center justify-center overflow-y-scroll p-6 lg:p-12">
+      {/* Sign up section */}
+      <section className="flex size-full flex-col items-center justify-center overflow-y-auto p-6 lg:p-12">
         <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
           <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
-            Login to your account!
+            Create your new account!
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href={PageRoutes.SIGNUP}
-              title="Sign Up"
+              href={PageRoutes.LOGIN}
+              title="Sign In"
               className="font-semibold text-black transition-all duration-200 hover:underline"
             >
-              Create a free account
+              Sign In
             </Link>
           </p>
           <form action="#" method="POST" className="mt-8">
             <div className="space-y-5">
+              <div>
+                <Label
+                  htmlFor="email"
+                  className="text-base font-medium text-gray-900"
+                >
+                  Full Name
+                </Label>
+                <div className="mt-2">
+                  <Input
+                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="email"
+                    placeholder="Email"
+                    id="email"
+                  ></Input>
+                </div>
+              </div>
+
               <div>
                 <Label
                   htmlFor="email"
@@ -74,7 +91,7 @@ const Page = () => {
                   type="submit"
                   className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                 >
-                  Sign In <Mail className="size-4 ml-1" />
+                  Create Account <User className="size-4 ml-1" />
                 </Button>
               </div>
             </div>
@@ -117,7 +134,7 @@ const Page = () => {
         </div>
       </section>
 
-      {/* Hero section */}
+      {/* Hero image section */}
       <section className="relative hidden size-full overflow-hidden lg:block">
         <div className="flex h-full items-center justify-center bg-gray-100">
           <div className="relative h-full w-full">
