@@ -16,6 +16,9 @@ import { User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { formSchema } from "./schema";
+import SubmitButton from "@/components/forms/submit-button";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 const SignUpForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -29,7 +32,20 @@ const SignUpForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    const { fullName, email, password } = values;
+    const { data, error } = await toast.promise(authClient.signUp.email(
+      {
+        email,
+        password,
+        name: fullName,
+      },
+    ), {
+      loading: "Creating account...",
+      success: "Account created successfully!",
+      error: "Failed to create account",
+    });
+
+    console.log(data, error);
   };
 
   return (
@@ -101,12 +117,12 @@ const SignUpForm = () => {
           />
 
           <div>
-            <Button
-              type="submit"
+            <SubmitButton
+              formState={form.formState}
               className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
             >
               Create Account <User className="ml-1 size-4" />
-            </Button>
+            </SubmitButton>
           </div>
         </div>
       </form>

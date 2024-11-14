@@ -16,6 +16,9 @@ import { Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { formSchema } from "./schema";
+import SubmitButton from "@/components/forms/submit-button";
+import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -27,7 +30,20 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    const { email, password } = values;
+    const { data, error } = await toast.promise(
+      authClient.signIn.email({
+        email,
+        password,
+      }),
+      {
+        loading: "Signing in...",
+        success: "Signed in successfully!",
+        error: "Failed to sign in",
+      },
+    );
+
+    console.log(data, error);
   };
 
   return (
@@ -79,12 +95,12 @@ const LoginForm = () => {
           />
 
           <div>
-            <Button
-              type="submit"
+            <SubmitButton
+              formState={form.formState}
               className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
             >
               Sign In <Mail className="ml-1 size-4" />
-            </Button>
+            </SubmitButton>
           </div>
         </div>
       </form>
