@@ -81,7 +81,7 @@ const SignUpForm = () => {
             name="fullName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-medium text-gray-900">
+                <FormLabel className="text-base font-medium">
                   Full Name
                 </FormLabel>
                 <FormControl>
@@ -97,7 +97,7 @@ const SignUpForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-medium text-gray-900">
+                <FormLabel className="text-base font-medium">
                   Email
                 </FormLabel>
                 <FormControl>
@@ -113,7 +113,7 @@ const SignUpForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-medium text-gray-900">
+                <FormLabel className="text-base font-medium">
                   Password
                 </FormLabel>
                 <FormControl>
@@ -129,7 +129,7 @@ const SignUpForm = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-medium text-gray-900">
+                <FormLabel className="text-base font-medium">
                   Confirm Password
                 </FormLabel>
                 <FormControl>
@@ -143,7 +143,7 @@ const SignUpForm = () => {
           <div>
             <SubmitButton
               formState={form.formState}
-              className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+              className="inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7"
             >
               Create Account <User className="ml-1 size-4" />
             </SubmitButton>

@@ -9,6 +9,7 @@ export const formSchema = z.object({
     .string({ message: "Password is required" })
     .min(6, { message: "Password must be at least 6 characters" })
     .max(255, { message: "Password too long" }),
+  rememberMe: z.boolean().default(false),
 });
 
 export type FormSchema = typeof formSchema;
