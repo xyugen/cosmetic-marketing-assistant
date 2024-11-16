@@ -1,9 +1,15 @@
 import { PageRoutes } from "@/constants/page-routes";
+import { type Metadata } from "next";
 import Link from "next/link";
 import HeroSection from "../_components/hero-section";
 import OrDivider from "../_components/or-divider";
 import SocialsAuth from "../_components/socials-auth";
 import LoginForm from "./_components/form";
+
+export const metadata: Metadata = {
+  title: "Login - D’Shine",
+  description: "Your AI-driven marketing and customer engagement tool.",
+};
 
 const Page = () => {
   return (
