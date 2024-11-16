@@ -7,14 +7,14 @@ interface LoadingButtonProps extends ButtonProps {
   isLoading: boolean;
 }
 
-const LoadingButton = (props: LoadingButtonProps) => {
+const LoadingButton = ({
+  className,
+  isLoading,
+  ...props
+}: LoadingButtonProps) => {
   return (
-    <Button
-      className={cn("w-full", props.className)}
-      disabled={props.isLoading}
-      {...props}
-    >
-      {props.isLoading ? (
+    <Button className={cn("w-full", className)} disabled={isLoading} {...props}>
+      {isLoading ? (
         <LoaderCircle
           className={cn(
             "h-6 w-6 animate-spin text-primary-foreground",
