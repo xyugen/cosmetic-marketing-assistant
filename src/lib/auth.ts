@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { db } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { sendEmail } from "@/services/email";
@@ -31,4 +32,10 @@ export const auth = betterAuth({
       });
     },
   },
+  socialProviders: {
+    facebook: {
+      clientId: env.FACEBOOK_APP_ID,
+      clientSecret: env.FACEBOOK_APP_SECRET,
+    }
+  }
 });
