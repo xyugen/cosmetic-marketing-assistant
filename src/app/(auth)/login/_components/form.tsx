@@ -31,19 +31,24 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { email, password } = values;
-    const { data, error } = await toast.promise(
-      authClient.signIn.email({
+    const toastId = toast.loading("Signing in...");
+    try {
+      const response = await authClient.signIn.email({
         email,
         password,
-      }),
-      {
-        loading: "Signing in...",
-        success: "Signed in successfully!",
-        error: "Failed to sign in",
-      },
-    );
+      });
+      if (response.error) {
+        throw new Error(response.error.message);
+      } else {
+        toast.success("Signed in successfully!", { id: toastId });
+      }
 
-    console.log(data, error);
+      console.log(response.data);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message, { id: toastId });
+      }
+    }
   };
 
   return (

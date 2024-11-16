@@ -19,8 +19,12 @@ import { formSchema } from "./schema";
 import SubmitButton from "@/components/forms/submit-button";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import { PageRoutes } from "@/constants/page-routes";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,19 +37,39 @@ const SignUpForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { fullName, email, password } = values;
-    const { data, error } = await toast.promise(authClient.signUp.email(
-      {
+    const toastId = toast.loading("Signing up...");
+    try {
+      const response = await authClient.signUp.email({
+        name: fullName,
         email,
         password,
-        name: fullName,
-      },
-    ), {
-      loading: "Creating account...",
-      success: "Account created successfully!",
-      error: "Failed to create account",
-    });
+        callbackURL: PageRoutes.LOGIN,
+      });
+      if (response.error) {
+        throw new Error(response.error.message);
+      } else {
+        toast.success(
+          () => {
+            router.push(PageRoutes.LOGIN);
+            return (
+              <div className="flex flex-col">
+                <p>Account created successfully!</p>
+                <p className="m-0 text-sm text-muted-foreground">
+                  Check your email to verify your account
+                </p>
+              </div>
+            );
+          },
+          { id: toastId, duration: 5000 },
+        );
+      }
 
-    console.log(data, error);
+      console.log(response.data);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message, { id: toastId });
+      }
+    }
   };
 
   return (

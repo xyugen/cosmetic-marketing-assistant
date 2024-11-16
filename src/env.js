@@ -8,8 +8,12 @@ export const env = createEnv({
    */
   server: {
     TURSO_DATABASE_URL: z.string().url(),
-    TURSO_AUTH_TOKEN: z.string().min(1),
-    BETTER_AUTH_SECRET: z.string().min(1),
+    TURSO_AUTH_TOKEN: z.string(),
+    BETTER_AUTH_SECRET: z.string(),
+    EMAIL_HOST: z.string(),
+    EMAIL_PORT: z.coerce.number(),
+    EMAIL_USER: z.string(),
+    EMAIL_PASS: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -29,12 +33,18 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    // server
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
-    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    EMAIL_HOST: process.env.EMAIL_HOST,
+    EMAIL_PORT: process.env.EMAIL_PORT,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS,
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+
+    // client
+    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
