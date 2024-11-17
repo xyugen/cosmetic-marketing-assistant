@@ -20,6 +20,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/constants/page-routes";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export interface UserItem {
   name: string;
@@ -84,13 +85,17 @@ export function NavUser({ user }: { user: UserItem }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <User />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href={PageRoutes.ACCOUNT}>
+                  <User />
+                  Account
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Cog />
-                Settings
+              <DropdownMenuItem asChild>
+                <Link href={PageRoutes.SETTINGS}>
+                  <Cog />
+                  Settings
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

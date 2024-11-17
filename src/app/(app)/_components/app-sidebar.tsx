@@ -21,6 +21,7 @@ import NavHeader from "./nav-header";
 import { type MainNavItem, NavMain } from "./nav-main";
 import { NavUser, type UserItem } from "./nav-user";
 import NavUserSkeleton from "./nav-user-skeleton";
+import { PageRoutes } from "@/constants/page-routes";
 
 const data: { user?: UserItem; navMain: MainNavItem[] } = {
   user: {
@@ -30,12 +31,12 @@ const data: { user?: UserItem; navMain: MainNavItem[] } = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: PageRoutes.DASHBOARD,
       icon: LayoutDashboard,
     },
     {
       title: "AI Marketing",
-      url: "#",
+      url: PageRoutes.AI_MARKETING,
       icon: Sparkles,
     },
     {
@@ -44,11 +45,11 @@ const data: { user?: UserItem; navMain: MainNavItem[] } = {
       items: [
         {
           title: "Overview",
-          url: "#",
+          url: PageRoutes.PRODUCT_OVERVIEW,
         },
         {
           title: "Product List",
-          url: "#",
+          url: PageRoutes.PRODUCT_LIST,
         },
       ],
     },
@@ -58,17 +59,17 @@ const data: { user?: UserItem; navMain: MainNavItem[] } = {
       items: [
         {
           title: "Overview",
-          url: "#",
+          url: PageRoutes.CUSTOMER_OVERVIEW,
         },
         {
           title: "Customer List",
-          url: "#",
+          url: PageRoutes.CUSTOMER_LIST,
         },
       ],
     },
     {
       title: "Analytics",
-      url: "#",
+      url: PageRoutes.ANALYTICS,
       icon: ChartArea,
     },
   ],
