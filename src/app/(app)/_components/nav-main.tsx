@@ -26,7 +26,6 @@ export interface MainNavItem {
 }
 
 export function NavMain({ items }: { items: MainNavItem[] }) {
-  console.log("ITEMS", items);
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Main</SidebarGroupLabel>
