@@ -1,6 +1,6 @@
 "use client";
 
-import DataTableColumnHeader from "@/components/tables/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { Checkbox } from "@/components/ui/checkbox";
 import { type ColumnDef } from "@tanstack/react-table";
 
@@ -21,14 +21,16 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+      <div className="w-6">
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      </div>
     ),
     cell: ({ row }) => (
       <Checkbox
@@ -42,14 +44,14 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "transactionNo",
-    header: "Transaction No.",
+    header: () => <div className="min-w-28">Transaction No.</div>,
     cell: ({ row }) => (
       <div className="lowercase">{row.getValue("transactionNo")}</div>
     ),
   },
   {
     accessorKey: "transactionType",
-    header: "Transaction Type",
+    header: () => <div className="min-w-32">Transaction Type</div>,
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("transactionType")}</div>
     ),

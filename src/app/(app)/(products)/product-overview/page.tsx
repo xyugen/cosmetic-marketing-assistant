@@ -31,7 +31,7 @@ const Page = async () => {
         Manage your product list and inventory
       </p>
       <div className="mt-4">
-        <DataTable filterColumn="productService" columns={columns} data={data} />
+        <DataTable filterColumn="productService" filterTitle="Product/Service" columns={columns} data={data} />
       </div>
     </div>
   );
