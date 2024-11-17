@@ -25,7 +25,8 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <SidebarProvider>
+    // the flex-col md:flex-row is fix for responsive sidebar
+    <SidebarProvider className="flex-col md:flex-row">
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
