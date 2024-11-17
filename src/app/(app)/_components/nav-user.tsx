@@ -16,6 +16,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { PageRoutes } from "@/constants/page-routes";
+import toast from "react-hot-toast";
 
 export interface UserItem {
   name: string;
@@ -23,6 +27,27 @@ export interface UserItem {
 }
 
 export function NavUser({ user }: { user: UserItem }) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const toastId = toast.loading("Signing out...");
+    try {
+      const response = await authClient.signOut();
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      toast.success("Signed out successfully!", { id: toastId });
+      router.push(PageRoutes.LOGIN);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message ?? "Failed to sign out", { id: toastId });
+        return;
+      }
+    }
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -69,7 +94,10 @@ export function NavUser({ user }: { user: UserItem }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="text-destructive hover:text-destructive/80"
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>
