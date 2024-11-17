@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
-  title: "Cosmetic Marketing Assistant",
+  title: "D’Shine",
   description: "Your AI-driven marketing and customer engagement tool.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
