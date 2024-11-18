@@ -3,7 +3,7 @@ import { columns, type Transaction } from "./_components/columns";
 
 async function getData(): Promise<Transaction[]> {
   // TODO: Replace with actual data
-  return new Array(52).fill(null).map(() => {
+  return new Array(20).fill(null).map(() => {
     return {
       transactionNo: Math.random().toString(36).substring(2, 9),
       transactionType: "Product",

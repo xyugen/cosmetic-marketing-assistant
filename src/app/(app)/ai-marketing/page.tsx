@@ -1,4 +1,4 @@
-import MarketingForm from "./_components/form"
+import MarketingContent from "./_components/marketing-content";
 
 const Page = () => {
   return (
@@ -9,9 +9,7 @@ const Page = () => {
       <p className="mt-2 text-sm text-gray-600">
         Your AI-powered marketing solution
       </p>
-      <div className="mt-4">
-        <MarketingForm />
-      </div>
+      <MarketingContent />
       <footer className="flex items-center justify-center p-2">
         <p className="text-sm text-gray-600">
           Please note that this is a prototype and may not be accurate.

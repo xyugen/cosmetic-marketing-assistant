@@ -74,7 +74,11 @@ export const tones = [
   },
 ];
 
-const MarketingForm = () => {
+const MarketingForm = ({
+  onSubmit,
+}: {
+  onSubmit?: (data: { name: string; description: string[] }) => void;
+}) => {
   const [chat, setChat] = useState<string[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,7 +92,7 @@ const MarketingForm = () => {
 
   const aiMutation = api.ai.productMarketing.useMutation();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setChat(["..."]);
 
     const { productDescription, emojis, hashtags, tone } = values;
@@ -112,11 +116,14 @@ const MarketingForm = () => {
             break;
           } else if (text?.type === "text-delta") {
             setChat((prev) => [...prev, text.textDelta]);
+
             controller.enqueue(text.textDelta);
           }
         }
       },
     });
+
+    if (onSubmit) onSubmit({ name: "Radiant Glow Serum", description: chat });
   };
 
   return (
@@ -130,7 +137,7 @@ const MarketingForm = () => {
         </div>
       )}
       <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
             name="productDescription"
