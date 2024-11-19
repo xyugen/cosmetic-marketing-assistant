@@ -30,7 +30,7 @@ export const POST = async (request: NextRequest) => {
 
     // Find the selected model
     const model = models.find((model) => model.id === modelId);
-    if (!model) {
+    if (modelId && !model) {
       return new NextResponse("Model not found", { status: 404 });
     }
 
@@ -45,7 +45,7 @@ export const POST = async (request: NextRequest) => {
 
     // Stream response using only the first user message
     const result = await streamText({
-      model: customModel(model.apiIdentifier),
+      model: customModel(model?.apiIdentifier),
       temperature: 0.3,
       messages: [
         {

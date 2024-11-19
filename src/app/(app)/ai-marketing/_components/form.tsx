@@ -18,8 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useChat } from "ai/react";
 import {
   Briefcase,
   Hash,
@@ -31,10 +31,11 @@ import {
   Sparkles,
   Star,
 } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
 import { formSchema } from "./schema";
+import toast from "react-hot-toast";
 
 export const tones = [
   {
@@ -79,7 +80,6 @@ const MarketingForm = ({
 }: {
   onSubmit?: (data: { name: string; description: string[] }) => void;
 }) => {
-  const [chat, setChat] = useState<string[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -90,49 +90,48 @@ const MarketingForm = ({
     },
   });
 
-  const aiMutation = api.ai.productMarketing.useMutation();
+  const { messages, append, error, setMessages, reload } = useChat({
+    body: {
+      // modelId: "llama-3.1-70b-versatile",
+    },
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    setChat(["..."]);
+    setMessages([]); // Clear previous messages
 
-    const { productDescription, emojis, hashtags, tone } = values;
-
-    console.log("VALUES:", values);
-    const response = await aiMutation.mutateAsync({
-      // TODO: Make this dynamic
-      productName: "Radiant Glow Serum",
-      productDescription: productDescription.trim(),
-      emojis,
-      hashtags,
-      tone,
-    });
-
-    new ReadableStream({
-      async start(controller) {
-        setChat([]);
-        for await (const text of response) {
-          if (text?.type === "finish") {
-            controller.close();
-            break;
-          } else if (text?.type === "text-delta") {
-            setChat((prev) => [...prev, text.textDelta]);
-            controller.enqueue(text.textDelta);
-          }
-        }
-      },
-    });
-
-    if (onSubmit) onSubmit({ name: "Radiant Glow Serum", description: chat });
+    try {
+      await append({
+        role: "user",
+        content: `
+        Product Name: "Radiant Serum"
+        Product Description: "${values.productDescription}"
+        Emojis: ${values.emojis ? '"Yes"' : '"No"'}
+        Hashtags: ${values.hashtags ? '"Yes"' : '"No"'}
+        Tone: "${values.tone}"
+        `,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.message ?? "Failed to send message");
+    }
+  }, [error]);
 
   return (
     <>
       {/* TODO: move to a separate component */}
-      {chat.length > 0 && (
+      {messages.length > 0 && (
         <div className="container whitespace-pre-wrap rounded border border-gray-200 p-4">
-          {chat.map((message, index) => (
-            <Fragment key={index}>{message}</Fragment>
-          ))}
+          {
+            messages.findLast((message) => message.role === "assistant")
+              ?.content
+          }
         </div>
       )}
       <Form {...form}>
@@ -235,7 +234,7 @@ const MarketingForm = ({
               )}
             />
           </div>
-          <SubmitButton mutation={aiMutation}>Submit</SubmitButton>
+          <SubmitButton formState={form.formState}>Submit</SubmitButton>
         </form>
       </Form>
     </>
