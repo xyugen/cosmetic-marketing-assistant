@@ -116,7 +116,6 @@ const MarketingForm = ({
             break;
           } else if (text?.type === "text-delta") {
             setChat((prev) => [...prev, text.textDelta]);
-
             controller.enqueue(text.textDelta);
           }
         }
