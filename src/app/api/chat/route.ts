@@ -19,8 +19,13 @@ export const POST = async (request: NextRequest) => {
       // id, // Might be needed in the future
       messages,
       modelId,
-    }: { id: string; messages: Array<Message>; modelId: string } =
-      await request.json();
+      additionalSystemPrompt,
+    }: {
+      id: string;
+      messages: Array<Message>;
+      modelId: string;
+      additionalSystemPrompt?: string;
+    } = await request.json();
 
     // Authenticate user
     const session = await auth.api.getSession({ headers: request.headers });
@@ -50,7 +55,7 @@ export const POST = async (request: NextRequest) => {
       messages: [
         {
           role: "system",
-          content: systemPrompt,
+          content: `${systemPrompt}\n${additionalSystemPrompt ?? ""}`,
         },
         ...coreMessages,
       ],

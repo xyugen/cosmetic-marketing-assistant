@@ -36,6 +36,7 @@ import { useForm } from "react-hook-form";
 import { type z } from "zod";
 import { formSchema } from "./schema";
 import toast from "react-hot-toast";
+import { productMarketingPrompt } from "@/lib/ai/prompts";
 
 export const tones = [
   {
@@ -90,26 +91,29 @@ const MarketingForm = ({
     },
   });
 
-  const { messages, append, error, setMessages, reload } = useChat({
-    body: {
-      // modelId: "llama-3.1-70b-versatile",
-    },
-  });
+  const { messages, append, error, setMessages } = useChat({});
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setMessages([]); // Clear previous messages
 
     try {
-      await append({
-        role: "user",
-        content: `
+      await append(
+        {
+          role: "user",
+          content: `
         Product Name: "Radiant Serum"
         Product Description: "${values.productDescription}"
         Emojis: ${values.emojis ? '"Yes"' : '"No"'}
         Hashtags: ${values.hashtags ? '"Yes"' : '"No"'}
         Tone: "${values.tone}"
         `,
-      });
+        },
+        {
+          body: {
+            additionalSystemPrompt: productMarketingPrompt,
+          },
+        },
+      );
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
