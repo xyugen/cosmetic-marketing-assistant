@@ -1,5 +1,6 @@
 "use client";
 
+import { objectSchema } from "@/app/api/chat/use-object/schema";
 import { AutosizeTextarea } from "@/components/forms/autosize-textarea";
 import SubmitButton from "@/components/forms/submit-button";
 import {
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useChat } from "ai/react";
+import { experimental_useObject as useObject } from "ai/react";
 import {
   Briefcase,
   Hash,
@@ -31,12 +32,11 @@ import {
   Sparkles,
   Star,
 } from "lucide-react";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
+import { useChatContext } from "./chat-context";
 import { formSchema } from "./schema";
-import toast from "react-hot-toast";
-import { productMarketingPrompt } from "@/lib/ai/prompts";
 
 export const tones = [
   {
@@ -76,11 +76,9 @@ export const tones = [
   },
 ];
 
-const MarketingForm = ({
-  onSubmit,
-}: {
-  onSubmit?: (data: { name: string; description: string[] }) => void;
-}) => {
+const MarketingForm = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -91,29 +89,28 @@ const MarketingForm = ({
     },
   });
 
-  const { messages, append, error, setMessages } = useChat({});
+  const { setObject } = useChatContext();
+  const { object, submit } = useObject({
+    api: "/api/chat/use-object",
+    schema: objectSchema,
+    onFinish: () => {
+      setIsLoading(false);
+    },
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    setMessages([]); // Clear previous messages
+    setIsLoading(true);
 
     try {
-      await append(
-        {
-          role: "user",
-          content: `
+      submit({
+        message: `
         Product Name: "Radiant Serum"
         Product Description: "${values.productDescription}"
         Emojis: ${values.emojis ? '"Yes"' : '"No"'}
         Hashtags: ${values.hashtags ? '"Yes"' : '"No"'}
         Tone: "${values.tone}"
         `,
-        },
-        {
-          body: {
-            additionalSystemPrompt: productMarketingPrompt,
-          },
-        },
-      );
+      });
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
@@ -122,126 +119,131 @@ const MarketingForm = ({
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error(error?.message ?? "Failed to send message");
+    try {
+      if (object?.productMarketing?.error) {
+        form.setError("productDescription", {
+          message: object.productMarketing.error,
+        });
+      }
+
+      if (object)
+        setObject((prev) => {
+          if (prev !== object) {
+            return { ...object };
+          }
+          return prev;
+        });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
-  }, [error]);
+  }, [object, setObject, form]);
 
   return (
-    <>
-      {/* TODO: move to a separate component */}
-      {messages.length > 0 && (
-        <div className="container whitespace-pre-wrap rounded border border-gray-200 p-4">
-          {
-            messages.findLast((message) => message.role === "assistant")
-              ?.content
-          }
-        </div>
-      )}
-      <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
-          <FormField
-            control={form.control}
-            name="productDescription"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Product description</FormLabel>
-                <FormControl>
-                  <AutosizeTextarea
-                    {...field}
-                    className="resize-none"
-                    placeholder="Describe your product... (i.e. A skincare serum that revitalizes and hydrates your skin)"
-                    minHeight={72}
-                    maxHeight={124}
-                    required
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <Form {...form}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
+        <FormField
+          control={form.control}
+          name="productDescription"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product description</FormLabel>
+              <FormControl>
+                <AutosizeTextarea
+                  {...field}
+                  className="resize-none"
+                  placeholder="Describe your product... (i.e. A skincare serum that revitalizes and hydrates your skin)"
+                  minHeight={72}
+                  maxHeight={124}
+                  required
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          {/* Toolbar */}
-          <div className="flex items-center justify-between">
-            {/* Toggle */}
-            <div className="flex items-center space-x-2">
-              <FormField
-                control={form.control}
-                name="emojis"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Toggle
-                        pressed={field.value}
-                        onPressedChange={field.onChange}
-                        aria-label="Toggle emojis"
-                        variant={"outline"}
-                      >
-                        <SmilePlus className="size-4" />
-                        EMOJIS
-                      </Toggle>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="hashtags"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Toggle
-                        pressed={field.value}
-                        onPressedChange={field.onChange}
-                        aria-label="Toggle hashtags"
-                        variant={"outline"}
-                      >
-                        <Hash className="size-4" />
-                        HASHTAGS
-                      </Toggle>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Select */}
+        {/* Toolbar */}
+        <div className="flex items-center justify-between">
+          {/* Toggle */}
+          <div className="flex items-center space-x-2">
             <FormField
               control={form.control}
-              name="tone"
+              name="emojis"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                  <FormLabel className="hidden md:block">Tone</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a tone" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {tones.map((tone) => (
-                        <SelectItem key={tone.value} value={tone.value}>
-                          <div className="flex w-full flex-row items-center gap-2">
-                            {tone.icon && <tone.icon className="size-4" />}
-                            <span className="text-sm font-medium">
-                              {tone.title}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <FormItem>
+                  <FormControl>
+                    <Toggle
+                      pressed={field.value}
+                      onPressedChange={field.onChange}
+                      aria-label="Toggle emojis"
+                      variant={"outline"}
+                    >
+                      <SmilePlus className="size-4" />
+                      EMOJIS
+                    </Toggle>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="hashtags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Toggle
+                      pressed={field.value}
+                      onPressedChange={field.onChange}
+                      aria-label="Toggle hashtags"
+                      variant={"outline"}
+                    >
+                      <Hash className="size-4" />
+                      HASHTAGS
+                    </Toggle>
+                  </FormControl>
                 </FormItem>
               )}
             />
           </div>
-          <SubmitButton formState={form.formState}>Submit</SubmitButton>
-        </form>
-      </Form>
-    </>
+
+          {/* Select */}
+          <FormField
+            control={form.control}
+            name="tone"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                <FormLabel className="hidden md:block">Tone</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a tone" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {tones.map((tone) => (
+                      <SelectItem key={tone.value} value={tone.value}>
+                        <div className="flex w-full flex-row items-center gap-2">
+                          {tone.icon && <tone.icon className="size-4" />}
+                          <span className="text-sm font-medium">
+                            {tone.title}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+        </div>
+        <SubmitButton isLoading={isLoading}>Submit</SubmitButton>
+      </form>
+    </Form>
   );
 };
 

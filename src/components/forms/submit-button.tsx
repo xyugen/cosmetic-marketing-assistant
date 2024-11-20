@@ -12,14 +12,22 @@ import type { FormState } from "react-hook-form";
 interface WithFormState {
   formState: FormState<any>;
   mutation?: never;
+  isLoading?: never;
 }
 
 interface WithMutation {
   formState?: never;
-  mutation: UseMutationResult<any, any, any, any>;
+  mutation: UseMutationResult<unknown, unknown, unknown, unknown>;
+  isLoading?: never;
 }
 
-type SubmitButtonProps = (WithFormState | WithMutation) & {
+interface WithLoading {
+  formState?: never;
+  mutation?: never;
+  isLoading: boolean;
+}
+
+type SubmitButtonProps = (WithFormState | WithMutation | WithLoading) & {
   children?: React.ReactNode;
   className?: string;
 };
@@ -29,8 +37,9 @@ const SubmitButton = ({
   mutation,
   formState,
   className,
+  isLoading,
 }: SubmitButtonProps) => {
-  const isLoading = formState?.isSubmitting || mutation?.isPending;
+  const loading = formState?.isSubmitting ?? mutation?.isPending ?? isLoading;
 
   return (
     <Button

@@ -14,7 +14,8 @@ import { Fragment, useState } from "react";
 
 export interface FacebookCardProps {
   name: string;
-  description: string[] | string ;
+  description: string[] | string;
+  hashTags?: (string | undefined)[];
   imageAlt?: string;
   className?: string;
 }
@@ -22,6 +23,7 @@ export interface FacebookCardProps {
 export default function FacebookCard({
   name,
   description,
+  hashTags,
   imageAlt = "",
   className,
 }: FacebookCardProps) {
@@ -43,21 +45,36 @@ export default function FacebookCard({
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-0">
-        <div className="mb-3 text-[#050505] whitespace-pre-wrap">
+        <div className="mb-3 whitespace-pre-wrap text-[#050505]">
           {Array.isArray(description)
             ? description.map((item, index) => (
                 <Fragment key={index}>{item}</Fragment>
               ))
             : description}
+
+          {(hashTags?.length ?? 0) > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {hashTags?.map((tag, index) => (
+                <a
+                  href={`https://www.facebook.com/hashtag/${tag?.replace("#", "")}`}
+                  target="_blank"
+                  key={index}
+                  className="text-blue-600 hover:underline"
+                >
+                  {tag}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="h-80 w-full rounded-md bg-gray-400" />
-        {/* <Image
-          src="https://placehold.co/468x300"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          // src="https://placehold.co/468x300"
           width={468}
           height={300}
-          alt="Beach scene"
-          className="h-auto w-full rounded-md"
-        /> */}
+          alt={imageAlt}
+          className="h-auto w-full rounded-md bg-muted text-sm text-blue-950"
+        />
       </CardContent>
       <CardFooter className="flex w-full justify-between border-t border-t-gray-200 px-2 py-1">
         <Button
