@@ -16,6 +16,7 @@ export const env = createEnv({
     EMAIL_PORT: z.coerce.number(),
     EMAIL_USER: z.string(),
     EMAIL_PASS: z.string(),
+    GROQ_API_KEY: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -46,6 +47,8 @@ export const env = createEnv({
     EMAIL_PORT: process.env.EMAIL_PORT,
     EMAIL_USER: process.env.EMAIL_USER,
     EMAIL_PASS: process.env.EMAIL_PASS,
+    // Groq
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
     NODE_ENV: process.env.NODE_ENV,
 
     /* CLIENT */

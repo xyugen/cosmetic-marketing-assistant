@@ -1,7 +1,6 @@
 "use client";
 
 import PasswordInput from "@/components/forms/password-input";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,

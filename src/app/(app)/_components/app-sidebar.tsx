@@ -7,8 +7,9 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  SidebarRail
 } from "@/components/ui/sidebar";
+import { PageRoutes } from "@/constants/page-routes";
 import { authClient } from "@/lib/auth-client";
 import {
   ChartArea,
@@ -21,7 +22,6 @@ import NavHeader from "./nav-header";
 import { type MainNavItem, NavMain } from "./nav-main";
 import { NavUser, type UserItem } from "./nav-user";
 import NavUserSkeleton from "./nav-user-skeleton";
-import { PageRoutes } from "@/constants/page-routes";
 
 const data: { user?: UserItem; navMain: MainNavItem[] } = {
   user: {
@@ -100,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, []);
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar variant="inset" collapsible="icon" {...props}>
       <SidebarHeader>
         <NavHeader />
       </SidebarHeader>
