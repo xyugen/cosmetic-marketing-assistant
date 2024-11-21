@@ -18,6 +18,7 @@ export interface FacebookCardProps {
   hashTags?: (string | undefined)[];
   imageAlt?: string;
   className?: string;
+  onLike?: () => void;
 }
 
 export default function FacebookCard({
@@ -26,8 +27,16 @@ export default function FacebookCard({
   hashTags,
   imageAlt = "",
   className,
+  onLike,
 }: FacebookCardProps) {
   const [isLiked, setIsLiked] = useState(false);
+
+  const shareToFacebook = () => {
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?quote=${description && encodeURIComponent(Array.isArray(description) ? description.join(" ") : description)}&hashtag=%23${hashTags?.join(",%23").replace(/,/g, "%23")}}`;
+
+    // Open the share URL in a new tab
+    window.open(facebookShareUrl, "_blank");
+  };
 
   return (
     <Card className={cn("w-full max-w-[500px] bg-white shadow-md", className)}>
@@ -80,7 +89,10 @@ export default function FacebookCard({
         <Button
           variant="ghost"
           className={`flex-1 ${isLiked ? "text-[#1877F2] hover:text-[#1877F2]" : "text-[#65676B]"}`}
-          onClick={() => setIsLiked(!isLiked)}
+          onClick={() => {
+            setIsLiked(!isLiked);
+            if (onLike) onLike();
+          }}
         >
           <ThumbsUp
             size={20}
@@ -92,7 +104,12 @@ export default function FacebookCard({
           <MessageCircle size={20} className="mr-2" />
           Comment
         </Button>
-        <Button variant="ghost" className="flex-1 text-[#65676B]">
+        <Button
+          title="Share to Facebook"
+          variant="ghost"
+          className="flex-1 text-[#65676B]"
+          onClick={shareToFacebook}
+        >
           <Share2 size={20} className="mr-2" />
           Share
         </Button>
