@@ -5,6 +5,7 @@ export enum PageRoutes {
   DASHBOARD = "/dashboard",
   PRODUCT_OVERVIEW = "/product-overview",
   PRODUCT_LIST = "/product-list",
+  PRODUCT_TRANSACTION = "/product-transaction",
   CUSTOMER_OVERVIEW = "/customer-overview",
   CUSTOMER_LIST = "/customer-list",
   AI_MARKETING = "/ai-marketing",

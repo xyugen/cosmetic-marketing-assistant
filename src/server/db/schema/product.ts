@@ -1,3 +1,4 @@
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, text } from "drizzle-orm/sqlite-core";
 import { createTable } from "../table";
 
@@ -14,3 +15,5 @@ export const productTransactions = createTable("product_transactions", {
   balance: integer("amount").notNull(),
   description: text("description"),
 });
+
+export type ProductTransactions = InferInsertModel<typeof productTransactions>;

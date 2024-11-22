@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import papa from "papaparse";
 import { zfd } from "zod-form-data";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { z } from "zod";
 
 export const productRouter = createTRPCRouter({
   uploadCSV: protectedProcedure
@@ -133,4 +134,23 @@ export const productRouter = createTRPCRouter({
         message: `CSV uploaded successfully. ${invalidRows.length} invalid rows were skipped.`,
       };
     }),
+  getProductTransactions: protectedProcedure.query(async ({ ctx }) => {
+    const transactions = await ctx.db
+      .select({
+        transactionNumber: productTransactions.transactionNumber,
+        type: productTransactions.type,
+        date: productTransactions.date,
+        productService: productTransactions.productService,
+        customer: productTransactions.customer,
+        quantity: productTransactions.quantity,
+        salesPrice: productTransactions.salesPrice,
+        amount: productTransactions.amount,
+        balance: productTransactions.balance,
+        description: productTransactions.description,
+      })
+      .from(productTransactions)
+      .orderBy(productTransactions.date);
+
+    return transactions;
+  }),
 });
