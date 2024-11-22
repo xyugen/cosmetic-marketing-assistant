@@ -1,4 +1,5 @@
 import { type SalesByProductData } from "@/interface/SalesByProductData";
+import { productTransactions } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import papa from "papaparse";
 import { zfd } from "zod-form-data";
@@ -8,12 +9,11 @@ export const productRouter = createTRPCRouter({
   uploadCSV: protectedProcedure
     .input(
       zfd.formData({
-        name: zfd.text(),
         file: zfd.file(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { name: fileName, file } = input;
+      const { file } = input;
 
       if (!file) {
         throw new TRPCError({
@@ -31,31 +31,93 @@ export const productRouter = createTRPCRouter({
 
       const csvText = await file.text();
 
+      const requiredHeaders = [
+        "Transaction No",
+        "Transaction Type",
+        "Date",
+        "Product/Service",
+        "Customer",
+        "Quantity",
+        "Sales Price",
+        "Amount",
+        "Balance",
+        "Memo Description",
+      ];
+
+      let headerValidationDone = false;
+      const invalidRows: string[] = [];
+
       papa.parse<SalesByProductData>(csvText, {
         header: true,
         skipEmptyLines: true,
         dynamicTyping: true,
-        transform: (value, field) => {
-          if (field === "Date") {
-            const date = new Date(value);
-            return isNaN(date.getTime()) ? null : date;
-          }
-          return value;
-        },
-        step: (row) => {
+        step: (row, parser) => {
           const rowData = row.data;
 
-          if (!rowData.Date || !rowData["Transaction No"]) {
-            console.warn(
-              "Skipping row due to missing Date or Transaction No."
+          // Validate headers only once
+          if (!headerValidationDone) {
+            const fileHeaders = Object.keys(rowData);
+            const missingHeaders = requiredHeaders.filter(
+              (header) => !fileHeaders.includes(header),
             );
-            return;
-          };
 
-          console.log("Row data:", rowData);
+            if (missingHeaders.length > 0) {
+              parser.abort();
+              throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: `Missing required headers: ${missingHeaders.join(", ")}`,
+              });
+            }
+            headerValidationDone = true;
+          }
+
+          if (
+            !rowData["Transaction No"] ||
+            !rowData.Date ||
+            isNaN(Number(rowData.Quantity)) ||
+            isNaN(Number(rowData["Sales Price"])) ||
+            isNaN(Number(rowData.Amount)) ||
+            isNaN(Number(rowData.Balance))
+          ) {
+            invalidRows.push(JSON.stringify(rowData));
+            return; // Skip invalid row
+          }
+
+          // Process valid row
+          try {
+            void ctx.db
+              .insert(productTransactions)
+              .values({
+                transactionNumber: rowData["Transaction No"],
+                type: rowData["Transaction Type"],
+                date: new Date(rowData.Date),
+                productService: rowData["Product/Service"],
+                customer: rowData.Customer,
+                quantity: Number(rowData.Quantity),
+                salesPrice: Number(rowData["Sales Price"]),
+                amount: Number(rowData.Amount),
+                balance: Number(rowData.Balance),
+                description: rowData["Memo Description"],
+              })
+              .execute();
+          } catch (error) {
+            if (error instanceof Error) {
+              console.error("Error inserting row:", error);
+              throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: error.message,
+              });
+            }
+          }
         },
         complete: () => {
-          // 
+          if (invalidRows.length > 0) {
+            console.warn(
+              `Parsing completed with ${invalidRows.length} invalid rows skipped.`,
+            );
+          } else {
+            console.log("CSV parsing completed successfully with no issues.");
+          }
         },
         error: (error: Error) => {
           console.error("Error parsing CSV:", error);
@@ -65,5 +127,10 @@ export const productRouter = createTRPCRouter({
           });
         },
       });
+
+      return {
+        success: true,
+        message: `CSV uploaded successfully. ${invalidRows.length} invalid rows were skipped.`,
+      };
     }),
 });
