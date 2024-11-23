@@ -7,7 +7,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import { PageRoutes } from "@/constants/page-routes";
 import { authClient } from "@/lib/auth-client";
@@ -24,10 +24,10 @@ import { NavUser, type UserItem } from "./nav-user";
 import NavUserSkeleton from "./nav-user-skeleton";
 
 const data: { user?: UserItem; navMain: MainNavItem[] } = {
-  user: {
-    name: "John Doe",
-    email: "c0L4e@example.com",
-  },
+  // user: {
+  //   name: "John Doe",
+  //   email: "c0L4e@example.com",
+  // },
   navMain: [
     {
       title: "Dashboard",
@@ -50,6 +50,10 @@ const data: { user?: UserItem; navMain: MainNavItem[] } = {
         {
           title: "Product List",
           url: PageRoutes.PRODUCT_LIST,
+        },
+        {
+          title: "Product Transaction",
+          url: PageRoutes.PRODUCT_TRANSACTION,
         },
       ],
     },
