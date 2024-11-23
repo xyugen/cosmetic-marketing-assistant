@@ -5,6 +5,7 @@ import { DataTableSkeleton } from "@/components/tables/data-table-skeleton";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import { columns } from "./_components/columns";
+import ProductTransactionHeader from "./_components/header";
 import ImportDialog from "./_components/import-dialog";
 
 const Page = () => {
@@ -23,12 +24,7 @@ const Page = () => {
 
   return (
     <div className="mx-auto w-full px-4 lg:max-w-6xl">
-      <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
-        Product Transactions
-      </h2>
-      <p className="mt-2 text-sm text-gray-600">
-        Manage your product transactions
-      </p>
+      <ProductTransactionHeader />
       <div className="mt-4">
         {data && !isLoading ? (
           <DataTable
