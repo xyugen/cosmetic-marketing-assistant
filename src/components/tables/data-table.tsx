@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   filterColumn?: string;
   filterTitle?: string;
+  onImport?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -36,6 +37,7 @@ export function DataTable<TData, TValue>({
   data,
   filterColumn,
   filterTitle,
+  onImport,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -71,7 +73,12 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="mx-auto w-full">
-      <DataTableToolbar table={table} filterColumn={filterColumn} filterTitle={filterTitle} />
+      <DataTableToolbar
+        table={table}
+        filterColumn={filterColumn}
+        filterTitle={filterTitle}
+        onImport={onImport}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

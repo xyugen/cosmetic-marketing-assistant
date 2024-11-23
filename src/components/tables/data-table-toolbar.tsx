@@ -1,20 +1,25 @@
 import { type Table } from "@tanstack/react-table";
 import { Input } from "../ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
+import UploadButtonForm from "../forms/upload-button-form";
+import { Button } from "../ui/button";
+// import UploadButtonForm from "../forms/upload-button-form";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   filterColumn?: string;
   filterTitle?: string;
+  onImport?: () => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
   filterColumn,
   filterTitle,
+  onImport,
 }: DataTableToolbarProps<TData>) {
   return (
-    <div className="flex items-center py-4">
+    <div className="flex items-center justify-between py-4">
       {filterColumn && (
         <Input
           placeholder={`Filter ${filterTitle ?? filterColumn}...`}
@@ -27,7 +32,11 @@ export function DataTableToolbar<TData>({
           className="w-[150px] lg:w-[250px]"
         />
       )}
-      <DataTableViewOptions table={table} />
+      <div className="flex items-center gap-2">
+        {/* <UploadButtonForm onImport={onImport} /> */}
+        <Button onClick={onImport}>Import</Button>
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   );
 }
