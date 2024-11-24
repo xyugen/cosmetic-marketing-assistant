@@ -4,6 +4,9 @@ import { TRPCError } from "@trpc/server";
 import papa from "papaparse";
 import { zfd } from "zod-form-data";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { z } from "zod";
+import { createProductTransactionSchema } from "@/app/(app)/(products)/product-transaction/create/_components/schema";
+import { syncCustomerTable } from "@/lib/api/sync-customer-table";
 
 export const productRouter = createTRPCRouter({
   uploadCSV: protectedProcedure
@@ -141,6 +144,7 @@ export const productRouter = createTRPCRouter({
 
       // Execute CSV parsing
       await parseCSV();
+      await syncCustomerTable(new Date());
 
       return {
         success: true,
@@ -166,4 +170,40 @@ export const productRouter = createTRPCRouter({
 
     return transactions;
   }),
+  createProductTransaction: protectedProcedure
+    .input(createProductTransactionSchema.extend({ balance: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const [transactionId] = await ctx.db
+          .insert(productTransactions)
+          .values({
+            transactionNumber: input.transactionNumber,
+            type: input.type,
+            date: input.date,
+            productService: input.productService,
+            customer: input.customer,
+            quantity: input.quantity,
+            salesPrice: input.salesPrice,
+            amount: input.amount,
+            balance: input.balance,
+            description: input.description,
+          })
+          .returning({ id: productTransactions.id })
+          .execute();
+        
+        await syncCustomerTable(new Date(input.date));
+
+        return {
+          message: "Transaction created successfully.",
+          id: transactionId,
+        };
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: error.message,
+          });
+        }
+      }
+    }),
 });

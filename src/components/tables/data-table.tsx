@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   filterColumn?: string;
   filterTitle?: string;
   onImport?: () => void;
+  onSync?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -38,6 +39,7 @@ export function DataTable<TData, TValue>({
   filterColumn,
   filterTitle,
   onImport,
+  onSync,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -78,6 +80,7 @@ export function DataTable<TData, TValue>({
         filterColumn={filterColumn}
         filterTitle={filterTitle}
         onImport={onImport}
+        onSync={onSync}
       />
       <div className="rounded-md border">
         <Table>

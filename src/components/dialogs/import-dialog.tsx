@@ -1,6 +1,11 @@
-import { CSVImport } from '@/components/forms/csv-import';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import React from 'react'
+import { CSVImport } from "@/components/forms/csv-import";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import React from "react";
 
 const ImportDialog = ({
   isImportDialogOpen,
@@ -21,6 +26,6 @@ const ImportDialog = ({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
-export default ImportDialog
+export default ImportDialog;

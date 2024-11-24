@@ -51,9 +51,9 @@ export function ModelSelector({
             onSelect={() => {
               setOpen(false);
 
-              startTransition(() => {
+              startTransition(async () => {
                 setOptimisticModelId(model.id);
-                saveModelId(model.id);
+                await saveModelId(model.id);
               });
             }}
             className="group/item flex flex-row items-center justify-between gap-4"

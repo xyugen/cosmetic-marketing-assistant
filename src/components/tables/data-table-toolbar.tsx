@@ -1,8 +1,9 @@
 import { type Table } from "@tanstack/react-table";
+import { Import, RefreshCcw, RefreshCw } from "lucide-react";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
-import UploadButtonForm from "../forms/upload-button-form";
-import { Button } from "../ui/button";
+import SyncButton from "../forms/sync-button";
 // import UploadButtonForm from "../forms/upload-button-form";
 
 interface DataTableToolbarProps<TData> {
@@ -10,6 +11,7 @@ interface DataTableToolbarProps<TData> {
   filterColumn?: string;
   filterTitle?: string;
   onImport?: () => void;
+  onSync?: () => void;
 }
 
 export function DataTableToolbar<TData>({
@@ -17,6 +19,7 @@ export function DataTableToolbar<TData>({
   filterColumn,
   filterTitle,
   onImport,
+  onSync,
 }: DataTableToolbarProps<TData>) {
   return (
     <div className="flex items-center justify-between py-4">
@@ -34,7 +37,13 @@ export function DataTableToolbar<TData>({
       )}
       <div className="flex items-center gap-2">
         {/* <UploadButtonForm onImport={onImport} /> */}
-        <Button onClick={onImport}>Import</Button>
+        {onSync && <SyncButton onSync={onSync} />}
+        {onImport && (
+          <Button variant={"outline"} onClick={onImport}>
+            <Import className="size-4" />
+            Import
+          </Button>
+        )}
         <DataTableViewOptions table={table} />
       </div>
     </div>

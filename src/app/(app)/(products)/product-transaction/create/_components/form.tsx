@@ -37,28 +37,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import type * as z from "zod";
 import CurrencyInput from "@/components/forms/currency-input";
-
-const formSchema = z.object({
-  transactionNumber: z.string().min(1, "Transaction number is required"),
-  type: z.string().optional(),
-  date: z.date({ required_error: "Date is required" }),
-  productService: z.string().min(1, "Product/Service is required"),
-  customer: z.string().min(1, "Customer is required"),
-  quantity: z.number().min(1, "Quantity must be at least 1"),
-  salesPrice: z.number().min(0, "Sales price must be positive"),
-  amount: z.number().min(0, "Amount must be positive"),
-  description: z.string().optional(),
-});
+import { api } from "@/trpc/react";
+import { createProductTransactionSchema } from "./schema";
+import SubmitButton from "@/components/forms/submit-button";
+import toast from "react-hot-toast";
 
 export default function CreateProductTransactionForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createProductTransactionSchema>>({
+    resolver: zodResolver(createProductTransactionSchema),
     defaultValues: {
-      type: "",
+      transactionNumber: "",
+      customer: "",
+      // type: undefined,
       description: "",
-      quantity: 1,
+      productService: "",
+      quantity: 0,
       salesPrice: 0,
       amount: 0,
     },
@@ -71,9 +66,37 @@ export default function CreateProductTransactionForm() {
   // Calculate the amount based on quantity and salesPrice
   const calculatedAmount = quantity * salesPrice;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const productTransactionMutation =
+    api.product.createProductTransaction.useMutation();
+
+  const onSubmit = async (
+    values: z.infer<typeof createProductTransactionSchema>,
+  ) => {
+    const toastId = toast.loading("Creating product transaction...");
+    try {
+      console.log("AMOUNT:", calculatedAmount);
+      const response = await productTransactionMutation.mutateAsync({
+        transactionNumber: values.transactionNumber,
+        type: values.type,
+        date: values.date,
+        productService: values.productService,
+        customer: values.customer,
+        quantity: values.quantity,
+        salesPrice: values.salesPrice,
+        amount: calculatedAmount,
+        balance: calculatedAmount, // Set balance to the same as amount
+        description: values.description,
+      });
+      if (response?.id) {
+        toast.success("Signed in successfully!", { id: toastId });
+        form.reset();
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message, { id: toastId });
+      }
+    }
+  };
 
   return (
     <Card className="w-full">
@@ -120,7 +143,6 @@ export default function CreateProductTransactionForm() {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="invoice">Invoice</SelectItem>
-                        <SelectItem value="purchase">Purchase</SelectItem>
                         <SelectItem value="return">Return</SelectItem>
                       </SelectContent>
                     </Select>
@@ -291,7 +313,10 @@ export default function CreateProductTransactionForm() {
               >
                 Discard
               </Button>
-              <Button type="submit">Create Transaction</Button>
+              {/* @ts-expect-error no reason */}
+              <SubmitButton mutation={productTransactionMutation}>
+                Create Transaction
+              </SubmitButton>
             </div>
           </form>
         </Form>
