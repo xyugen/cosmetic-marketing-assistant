@@ -1,12 +1,12 @@
 "use client";
 
+import ImportDialog from "@/components/dialogs/import-dialog";
 import { DataTable } from "@/components/tables/data-table";
 import { DataTableSkeleton } from "@/components/tables/data-table-skeleton";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import { columns } from "./_components/columns";
 import ProductTransactionHeader from "./_components/header";
-import ImportDialog from "./_components/import-dialog";
 
 const Page = () => {
   const { data, isLoading, refetch } =
