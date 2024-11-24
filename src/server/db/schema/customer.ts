@@ -4,7 +4,7 @@ import { createTable } from "../table";
 
 export const customer = createTable("customer", {
   id: integer("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   totalTransactions: integer("total_transactions").notNull().default(0),
   totalQuantityPurchased: integer("total_quantity_purchased")
     .notNull()
