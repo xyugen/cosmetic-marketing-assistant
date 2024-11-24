@@ -34,10 +34,12 @@ export function DataTableToolbar<TData>({
       )}
       <div className="flex items-center gap-2">
         {/* <UploadButtonForm onImport={onImport} /> */}
-        <Button variant={"outline"} onClick={onImport}>
-          <Import className="size-4" />
-          Import
-        </Button>
+        {onImport && (
+          <Button variant={"outline"} onClick={onImport}>
+            <Import className="size-4" />
+            Import
+          </Button>
+        )}
         <DataTableViewOptions table={table} />
       </div>
     </div>
