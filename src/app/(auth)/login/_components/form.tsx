@@ -49,8 +49,6 @@ const LoginForm = () => {
         toast.success("Signed in successfully!", { id: toastId });
         router.push(PageRoutes.DASHBOARD);
       }
-
-      console.log(response.data);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message, { id: toastId });
