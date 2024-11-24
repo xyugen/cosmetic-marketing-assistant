@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
 import UploadButtonForm from "../forms/upload-button-form";
 import { Button } from "../ui/button";
+import { Import } from "lucide-react";
 // import UploadButtonForm from "../forms/upload-button-form";
 
 interface DataTableToolbarProps<TData> {
@@ -34,7 +35,10 @@ export function DataTableToolbar<TData>({
       )}
       <div className="flex items-center gap-2">
         {/* <UploadButtonForm onImport={onImport} /> */}
-        <Button onClick={onImport}>Import</Button>
+        <Button variant={"outline"} onClick={onImport}>
+          <Import className="size-4" />
+          Import
+        </Button>
         <DataTableViewOptions table={table} />
       </div>
     </div>
