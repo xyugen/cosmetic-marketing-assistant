@@ -6,6 +6,7 @@ import { zfd } from "zod-form-data";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { createProductTransactionSchema } from "@/app/(app)/(products)/product-transaction/create/_components/schema";
+import { syncCustomerTable } from "@/lib/api/sync-customer-table";
 
 export const productRouter = createTRPCRouter({
   uploadCSV: protectedProcedure
@@ -143,6 +144,7 @@ export const productRouter = createTRPCRouter({
 
       // Execute CSV parsing
       await parseCSV();
+      await syncCustomerTable(new Date());
 
       return {
         success: true,
@@ -188,6 +190,8 @@ export const productRouter = createTRPCRouter({
           })
           .returning({ id: productTransactions.id })
           .execute();
+        
+        await syncCustomerTable(new Date(input.date));
 
         return {
           message: "Transaction created successfully.",
