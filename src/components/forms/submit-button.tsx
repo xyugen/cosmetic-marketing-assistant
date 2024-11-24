@@ -9,6 +9,7 @@ import type { FormState } from "react-hook-form";
  **************************************************************/
 
 interface WithFormState {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formState: FormState<any>;
   mutation?: never;
   isLoading?: never;
