@@ -5,7 +5,10 @@ import type { LibSQLDatabase } from "drizzle-orm/libsql";
 import papa from "papaparse";
 import type * as schema from "@/server/db/schema";
 
-export const parseCSV = async (csvText: string, db: LibSQLDatabase<typeof schema>) => {
+export const parseCsvAndUpdateDb = async (
+  csvText: string,
+  db: LibSQLDatabase<typeof schema>,
+) => {
   const requiredHeaders = [
     "Transaction No",
     "Transaction Type",

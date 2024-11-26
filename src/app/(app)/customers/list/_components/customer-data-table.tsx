@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { columns } from "./columns";
 
 const CustomerDataTable = () => {
-  const { data, isLoading, refetch } = api.customer.getCustomers.useQuery();
+  const { data, isLoading, refetch } = api.customer.getAllCustomers.useQuery();
 
   const syncCustomersMutation = api.customer.syncCustomers.useMutation();
 

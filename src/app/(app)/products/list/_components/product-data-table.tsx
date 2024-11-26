@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { columns } from "./columns";
 
 const ProductDataTable = () => {
-  const { data, isLoading, refetch } = api.product.getProducts.useQuery();
+  const { data, isLoading, refetch } = api.product.getAllProducts.useQuery();
 
   const syncProductMutation = api.product.syncProducts.useMutation();
 
