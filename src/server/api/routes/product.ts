@@ -2,7 +2,7 @@ import { createProductTransactionSchema } from "@/app/(app)/transactions/create/
 import { parseCSV as parseCsvAndUpdateDb } from "@/lib/api/parseCSV";
 import { syncCustomerTable } from "@/lib/api/sync-customer-table";
 import { syncProductTable } from "@/lib/api/sync-product-table";
-import { productTransactions } from "@/server/db/schema";
+import { product as productTable, productTransactions } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -111,6 +111,18 @@ export const productRouter = createTRPCRouter({
         }
       }
     }),
+  getProducts: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      return await ctx.db.select().from(productTable);
+    } catch (error) {
+      if (error instanceof TRPCError) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message,
+        });
+      }
+    }
+  }),
   syncProducts: protectedProcedure
     .input(z.object({ date: z.date() }))
     .mutation(async ({ input }) => {

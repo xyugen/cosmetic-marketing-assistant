@@ -1,7 +1,13 @@
-const Page = () => {
-  return (
-    <div>Product List</div>
-  )
-}
+import ProductListHeader from "./_components/header";
+import ProductDataTable from "./_components/product-data-table";
 
-export default Page
+const Page = async () => {
+  return (
+    <div className="mx-auto w-full px-4 lg:max-w-6xl">
+      <ProductListHeader />
+      <ProductDataTable />
+    </div>
+  );
+};
+
+export default Page;

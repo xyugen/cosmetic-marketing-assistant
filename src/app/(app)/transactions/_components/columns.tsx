@@ -60,7 +60,13 @@ export const columns: ColumnDef<ProductTransaction>[] = [
   {
     accessorKey: "productService",
     header: () => <div className="min-w-32">Product Service</div>,
-    cell: ({ row }) => <div>{row.getValue("productService")}</div>,
+    cell: ({ row }) => {
+      const productService: string = row.getValue("productService");
+      const replacedProductService = productService
+        .replace("(deleted)", "")
+        .trim();
+      return <div>{replacedProductService}</div>;
+    },
   },
   {
     accessorKey: "customer",
