@@ -1,6 +1,10 @@
-import { type SVGProps } from "react";
+import { forwardRef, type SVGProps } from "react";
+import { type Icon } from "./type";
 
-export function IconoirFacebook(props: SVGProps<SVGSVGElement>) {
+export const IconoirFacebook: Icon = forwardRef<
+  SVGSVGElement,
+  SVGProps<SVGSVGElement>
+>((props, ref) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -8,6 +12,7 @@ export function IconoirFacebook(props: SVGProps<SVGSVGElement>) {
       height="1em"
       viewBox="0 0 24 24"
       {...props}
+      ref={ref}
     >
       <path
         fill="none"
@@ -19,4 +24,6 @@ export function IconoirFacebook(props: SVGProps<SVGSVGElement>) {
       ></path>
     </svg>
   );
-}
+});
+
+IconoirFacebook.displayName = "Facebook";

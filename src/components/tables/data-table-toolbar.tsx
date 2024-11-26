@@ -1,9 +1,9 @@
 import { type Table } from "@tanstack/react-table";
-import { Import, RefreshCcw, RefreshCw } from "lucide-react";
+import { Import } from "lucide-react";
+import SyncButton from "../forms/sync-button";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
-import SyncButton from "../forms/sync-button";
 // import UploadButtonForm from "../forms/upload-button-form";
 
 interface DataTableToolbarProps<TData> {
@@ -39,7 +39,7 @@ export function DataTableToolbar<TData>({
         {/* <UploadButtonForm onImport={onImport} /> */}
         {onSync && <SyncButton onSync={onSync} />}
         {onImport && (
-          <Button variant={"outline"} onClick={onImport}>
+          <Button variant={"outline"} size={"sm"} onClick={onImport}>
             <Import className="size-4" />
             Import
           </Button>

@@ -6,29 +6,29 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const ProductTransactionHeader = () => {
+const TransactionHeader = () => {
   const router = useRouter();
 
-  const handleNewProductTransaction = () => {
-    router.push(PageRoutes.PRODUCT_TRANSACTION_CREATE);
+  const handleNewTransaction = () => {
+    router.push(PageRoutes.TRANSACTION_CREATE);
   };
 
   return (
     <div className="flex items-baseline justify-between">
       <div>
         <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
-          Product Transactions
+          Transactions
         </h2>
         <p className="mt-2 text-sm text-gray-600">
-          Manage your product transactions
+          Manage your transactions
         </p>
       </div>
-      <Button onClick={handleNewProductTransaction}>
+      <Button onClick={handleNewTransaction}>
         <Plus className="size-4" />{" "}
-        <span className="hidden md:block">New Product Transaction</span>
+        <span className="hidden md:block">New Transaction</span>
       </Button>
     </div>
   );
 };
 
-export default ProductTransactionHeader;
+export default TransactionHeader;

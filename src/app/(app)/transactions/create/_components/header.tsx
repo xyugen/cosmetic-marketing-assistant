@@ -10,7 +10,7 @@ const CreateProductTransactionHeader = () => {
   const router = useRouter();
 
   const handleGoBack = () => {
-    router.push(PageRoutes.PRODUCT_TRANSACTION);
+    router.push(PageRoutes.TRANSACTIONS);
   };
 
   return (
@@ -25,11 +25,11 @@ const CreateProductTransactionHeader = () => {
       </Button>
       <div>
         <small className="text-muted-foreground">
-          Back to product transactions
+          Back to transactions
         </small>
 
         <h2 className="text-lg font-semibold leading-tight">
-          Add Product Transactions
+          Add Transactions
         </h2>
       </div>
     </div>

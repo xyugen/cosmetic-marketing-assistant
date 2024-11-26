@@ -5,7 +5,7 @@ import papa from "papaparse";
 import { zfd } from "zod-form-data";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { createProductTransactionSchema } from "@/app/(app)/(products)/product-transaction/create/_components/schema";
+import { createProductTransactionSchema } from "@/app/(app)/transactions/create/_components/schema";
 import { syncCustomerTable } from "@/lib/api/sync-customer-table";
 
 export const productRouter = createTRPCRouter({
