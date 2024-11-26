@@ -33,7 +33,7 @@ export const columns: ColumnDef<Customer>[] = [
   {
     accessorKey: "name",
     header: () => <div className="min-w-28">Name</div>,
-    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "totalTransactions",
@@ -62,7 +62,15 @@ export const columns: ColumnDef<Customer>[] = [
   {
     accessorKey: "mostPurchasedProductService",
     header: () => <div className="min-w-32">Most Purchased</div>,
-    cell: ({ row }) => <div>{row.getValue("mostPurchasedProductService")}</div>,
+    cell: ({ row }) => {
+      const mostPurchasedProductService: string = row.getValue(
+        "mostPurchasedProductService",
+      );
+      const replacedmostPurchasedProductService = mostPurchasedProductService
+        .replace("(deleted)", "")
+        .trim();
+      return <div>{replacedmostPurchasedProductService}</div>;
+    },
   },
   {
     accessorKey: "totalQuantityPurchased",

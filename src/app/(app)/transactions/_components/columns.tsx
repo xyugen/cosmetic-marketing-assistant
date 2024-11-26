@@ -2,10 +2,10 @@
 
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type ProductTransactions } from "@/server/db/schema";
+import { type ProductTransaction } from "@/server/db/schema";
 import { type ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<ProductTransactions>[] = [
+export const columns: ColumnDef<ProductTransaction>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -60,7 +60,13 @@ export const columns: ColumnDef<ProductTransactions>[] = [
   {
     accessorKey: "productService",
     header: () => <div className="min-w-32">Product Service</div>,
-    cell: ({ row }) => <div>{row.getValue("productService")}</div>,
+    cell: ({ row }) => {
+      const productService: string = row.getValue("productService");
+      const replacedProductService = productService
+        .replace("(deleted)", "")
+        .trim();
+      return <div>{replacedProductService}</div>;
+    },
   },
   {
     accessorKey: "customer",

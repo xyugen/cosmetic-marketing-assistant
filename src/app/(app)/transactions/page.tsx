@@ -6,7 +6,7 @@ import { DataTableSkeleton } from "@/components/tables/data-table-skeleton";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import { columns } from "./_components/columns";
-import ProductTransactionHeader from "./_components/header";
+import TransactionHeader from "./_components/header";
 
 const Page = () => {
   const { data, isLoading, refetch } =
@@ -24,7 +24,7 @@ const Page = () => {
 
   return (
     <div className="mx-auto w-full px-4 lg:max-w-6xl">
-      <ProductTransactionHeader />
+      <TransactionHeader />
       <div className="mt-4">
         {data && !isLoading ? (
           <DataTable

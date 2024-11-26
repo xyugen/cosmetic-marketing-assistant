@@ -1,19 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { PageRoutes } from "@/constants/page-routes";
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React from "react";
-
 const CustomerListHeader = () => {
-  // const router = useRouter();
-
-  // TODO: Add create customer
-  // const handleNewCustomer = () => {
-  //   router.push(PageRoutes);
-  // };
-
   return (
     <div className="flex items-baseline justify-between">
       <div>
@@ -24,10 +11,10 @@ const CustomerListHeader = () => {
           Manage your customer list
         </p>
       </div>
-      <Button>
+      {/* <Button>
         <Plus className="size-4" />{" "}
         <span className="hidden md:block">New Customer</span>
-      </Button>
+      </Button> */}
     </div>
   );
 };

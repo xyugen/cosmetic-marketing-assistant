@@ -4,7 +4,11 @@ import {
   productTransactions,
 } from "@/server/db/schema";
 
-export const syncCustomerTable = async (lastImportDate: Date) => {
+export const syncCustomerTable = async ({
+  lastImportDate,
+}: {
+  lastImportDate: Date;
+}) => {
   const uniqueCustomers = await db
     .selectDistinct({ customer: productTransactions.customer })
     .from(productTransactions)

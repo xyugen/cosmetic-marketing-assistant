@@ -101,9 +101,9 @@ export default function CreateProductTransactionForm() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Create Product Transaction</CardTitle>
+        <CardTitle>Create Transaction</CardTitle>
         <CardDescription>
-          Enter the details for the new product transaction.
+          Enter the details for the new transaction.
         </CardDescription>
       </CardHeader>
       <CardContent>

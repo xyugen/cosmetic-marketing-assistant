@@ -6,16 +6,16 @@ import { api } from "@/trpc/react";
 import toast from "react-hot-toast";
 import { columns } from "./columns";
 
-const CustomerDataTable = () => {
-  const { data, isLoading, refetch } = api.customer.getCustomers.useQuery();
+const ProductDataTable = () => {
+  const { data, isLoading, refetch } = api.product.getAllProducts.useQuery();
 
-  const syncCustomersMutation = api.customer.syncCustomers.useMutation();
+  const syncProductMutation = api.product.syncProducts.useMutation();
 
   const handleSync = async () => {
     try {
       // FIXME: instead of using a fixed date, find a way to get the min date
-      await syncCustomersMutation.mutateAsync({ date: new Date(2001) });
-      toast.success("Customers synced successfully!");
+      await syncProductMutation.mutateAsync({ date: new Date(2001) });
+      toast.success("Products synced successfully!");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -28,8 +28,8 @@ const CustomerDataTable = () => {
     <div className="mt-4">
       {data && !isLoading ? (
         <DataTable
-          filterColumn="name"
-          filterTitle="Customer Name"
+          filterColumn="productService"
+          filterTitle="Product/Service"
           columns={columns}
           data={data}
           onSync={handleSync}
@@ -41,4 +41,4 @@ const CustomerDataTable = () => {
   );
 };
 
-export default CustomerDataTable;
+export default ProductDataTable;
