@@ -2,10 +2,10 @@
 
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type ProductTransactions } from "@/server/db/schema";
+import { type ProductTransaction } from "@/server/db/schema";
 import { type ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<ProductTransactions>[] = [
+export const columns: ColumnDef<ProductTransaction>[] = [
   {
     id: "select",
     header: ({ table }) => (

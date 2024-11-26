@@ -1,6 +1,19 @@
-import { type InferInsertModel } from "drizzle-orm";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { integer, text } from "drizzle-orm/sqlite-core";
 import { createTable } from "../table";
+import { customer } from "./customer";
+
+export const product = createTable("product", {
+  id: integer("id").primaryKey(),
+  productService: text("product_service").notNull().unique(),
+  totalSales: integer("total_sales").notNull().default(0),
+  totalQuantitySold: integer("total_quantity_sold").notNull().default(0),
+  totalTransactions: integer("total_transactions").notNull().default(0),
+  averagePrice: integer("average_price").notNull().default(0),
+  lastTransactionDate: integer("last_transaction_date", { mode: "timestamp" }),
+  topCustomer: text("top_customer").references(() => customer.name),
+  description: text("description"),
+});
 
 export const productTransactions = createTable("product_transactions", {
   id: integer("id").primaryKey(),
@@ -16,4 +29,8 @@ export const productTransactions = createTable("product_transactions", {
   description: text("description"),
 });
 
-export type ProductTransactions = InferInsertModel<typeof productTransactions>;
+export type Product = InferSelectModel<typeof product>;
+export type ProductTransaction = InferInsertModel<typeof productTransactions>;
+
+export type InsertProduct = InferInsertModel<typeof product>;
+export type InsertProductTransaction = InferInsertModel<typeof productTransactions>;
