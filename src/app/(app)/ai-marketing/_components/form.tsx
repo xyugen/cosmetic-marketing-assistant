@@ -241,7 +241,9 @@ const MarketingForm = () => {
             )}
           />
         </div>
-        <SubmitButton isLoading={isLoading}>Submit</SubmitButton>
+        <SubmitButton className="w-full" isLoading={isLoading}>
+          Generate Marketing Content
+        </SubmitButton>
       </form>
     </Form>
   );
