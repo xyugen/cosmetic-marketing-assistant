@@ -7,12 +7,12 @@ export enum PageRoutes {
   TRANSACTION_CREATE = `${TRANSACTIONS}/create`,
 
   // PRODUCT
-  PRODUCT_OVERVIEW = "/product-overview",
-  PRODUCT_LIST = "/product-list",
+  PRODUCT_OVERVIEW = "/products",
+  PRODUCT_LIST = `${PRODUCT_OVERVIEW}/list`,
 
   // CUSTOMER
-  CUSTOMER_OVERVIEW = "/customer-overview",
-  CUSTOMER_LIST = "/customer-list",
+  CUSTOMER_OVERVIEW = "/customers",
+  CUSTOMER_LIST = `${CUSTOMER_OVERVIEW}/list`,
   AI_MARKETING = "/ai-marketing",
   ANALYTICS = "/analytics",
   ACCOUNT = "/account",
