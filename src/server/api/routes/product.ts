@@ -1,12 +1,12 @@
-import { type SalesByProductData } from "@/interface/SalesByProductData";
+import { createProductTransactionSchema } from "@/app/(app)/transactions/create/_components/schema";
+import { parseCSV as parseCsvAndUpdateDb } from "@/lib/api/parseCSV";
+import { syncCustomerTable } from "@/lib/api/sync-customer-table";
+import { syncProductTable } from "@/lib/api/sync-product-table";
 import { productTransactions } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
-import papa from "papaparse";
+import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { z } from "zod";
-import { createProductTransactionSchema } from "@/app/(app)/transactions/create/_components/schema";
-import { syncCustomerTable } from "@/lib/api/sync-customer-table";
 
 export const productRouter = createTRPCRouter({
   uploadCSV: protectedProcedure
@@ -34,122 +34,26 @@ export const productRouter = createTRPCRouter({
 
       const csvText = await file.text();
 
-      const requiredHeaders = [
-        "Transaction No",
-        "Transaction Type",
-        "Date",
-        "Product/Service",
-        "Customer",
-        "Quantity",
-        "Sales Price",
-        "Amount",
-        "Balance",
-        "Memo/Description",
-      ];
+      try {
+        // Execute CSV parsing
+        const invalidRows = await parseCsvAndUpdateDb(csvText, ctx.db);
 
-      const invalidRows: string[] = [];
+        // Sync tables
+        await syncProductTable(new Date());
+        await syncCustomerTable(new Date());
 
-      const parseCSV = () =>
-        new Promise<void>((resolve, reject) => {
-          let headerValidationDone = false;
-
-          papa.parse<SalesByProductData>(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: true,
-            step: (row, parser) => {
-              const rowData = row.data;
-
-              try {
-                // Validate headers only once
-                if (!headerValidationDone) {
-                  const fileHeaders = Object.keys(rowData);
-                  const missingHeaders = requiredHeaders.filter(
-                    (header) => !fileHeaders.includes(header),
-                  );
-
-                  if (missingHeaders.length > 0) {
-                    parser.abort();
-                    return reject(
-                      new TRPCError({
-                        code: "BAD_REQUEST",
-                        message: `Missing required headers: ${missingHeaders.join(", ")}`,
-                      }),
-                    );
-                  }
-                  headerValidationDone = true;
-                }
-
-                // Validate row data
-                if (
-                  !rowData["Transaction No"] ||
-                  !rowData.Date ||
-                  isNaN(Number(rowData.Quantity)) ||
-                  isNaN(Number(rowData["Sales Price"])) ||
-                  isNaN(Number(rowData.Amount)) ||
-                  isNaN(Number(rowData.Balance))
-                ) {
-                  invalidRows.push(JSON.stringify(rowData));
-                  return; // Skip invalid row
-                }
-
-                // Insert valid row into the database
-                void ctx.db
-                  .insert(productTransactions)
-                  .values({
-                    transactionNumber: rowData["Transaction No"],
-                    type: rowData["Transaction Type"],
-                    date: new Date(rowData.Date),
-                    productService: rowData["Product/Service"],
-                    customer: rowData.Customer,
-                    quantity: Number(rowData.Quantity),
-                    salesPrice: Number(rowData["Sales Price"]),
-                    amount: Number(rowData.Amount),
-                    balance: Number(rowData.Balance),
-                    description: rowData["Memo Description"],
-                  })
-                  .execute();
-
-                console.log("Inserted a row successfully:", rowData);
-              } catch (error) {
-                console.error("Error processing row:", error);
-                return reject(
-                  new TRPCError({
-                    code: "BAD_REQUEST",
-                    message:
-                      error instanceof Error ? error.message : "Unknown error",
-                  }),
-                );
-              }
-            },
-            complete: () => {
-              console.log(
-                invalidRows.length > 0
-                  ? `Parsing completed with ${invalidRows.length} invalid rows skipped.`
-                  : "CSV parsing completed successfully.",
-              );
-              resolve();
-            },
-            error: (error: Error) => {
-              console.error("Error parsing CSV:", error);
-              reject(
-                new TRPCError({
-                  code: "BAD_REQUEST",
-                  message: error.message || "Error parsing CSV",
-                }),
-              );
-            },
+        return {
+          success: true,
+          message: `CSV uploaded successfully. ${invalidRows.length} invalid rows were skipped.`,
+        };
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: error.message,
           });
-        });
-
-      // Execute CSV parsing
-      await parseCSV();
-      await syncCustomerTable(new Date());
-
-      return {
-        success: true,
-        message: `CSV uploaded successfully. ${invalidRows.length} invalid rows were skipped.`,
-      };
+        }
+      }
     }),
   getProductTransactions: protectedProcedure.query(async ({ ctx }) => {
     const transactions = await ctx.db
@@ -190,7 +94,8 @@ export const productRouter = createTRPCRouter({
           })
           .returning({ id: productTransactions.id })
           .execute();
-        
+
+        await syncProductTable(new Date(input.date));
         await syncCustomerTable(new Date(input.date));
 
         return {
@@ -204,6 +109,19 @@ export const productRouter = createTRPCRouter({
             message: error.message,
           });
         }
+      }
+    }),
+  syncProducts: protectedProcedure
+    .input(z.object({ date: z.date() }))
+    .mutation(async ({ input }) => {
+      try {
+        return await syncProductTable(input.date);
+      } catch (error) {
+        if (error instanceof Error)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: error.message,
+          });
       }
     }),
 });
