@@ -7,6 +7,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 export const auth = betterAuth({
+  trustedOrigins: [env.NEXT_PUBLIC_BETTER_AUTH_URL!],
   database: drizzleAdapter(db, {
     provider: "sqlite",
     schema: {
