@@ -1,4 +1,4 @@
-import { getCustomersValue } from "@/lib/api/analytics/query";
+import { getCustomerSegmentation, getCustomersValue } from "@/lib/api/analytics/query";
 import { categorizeByStandardDeviation } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -17,6 +17,18 @@ export const analyticsRoute = createTRPCRouter({
   getCustomersValue: protectedProcedure.query(async () => {
     try {
       return await getCustomersValue();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message,
+        });
+      }
+    }
+  }),
+  getCustomerSegmentation: protectedProcedure.query(async () => {
+    try {
+      return await getCustomerSegmentation();
     } catch (error) {
       if (error instanceof Error) {
         throw new TRPCError({

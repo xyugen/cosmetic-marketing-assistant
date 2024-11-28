@@ -77,6 +77,16 @@ export const calculateStandardDeviation = (data: number[]) => {
   return standardDeviation;
 };
 
+/**
+ * Categorizes an array of numbers into three categories: those below one
+ * standard deviation from the mean, those within one standard deviation of
+ * the mean, and those above one standard deviation from the mean.
+ *
+ * @param data - An array of numbers to be categorized.
+ * @returns An object with three properties: "lows", "average", and "highs",
+ * each containing an array of numbers that fall within the respective
+ * category.
+ */
 export const categorizeByStandardDeviation = (data: number[]) => {
   const mean = calculateMean(data);
   const standardDeviation = calculateStandardDeviation(data);

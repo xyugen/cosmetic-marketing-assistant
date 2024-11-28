@@ -1,7 +1,9 @@
+import type { CustomerValue } from "@/interface/CustomerValue";
+import { categorizeByStandardDeviation } from "@/lib/utils";
 import { db } from "@/server/db";
 import { type Customer, customer } from "@/server/db/schema";
 
-export const getCustomersValue = async () => {
+export const getCustomersValue = async (): Promise<CustomerValue[]> => {
   const customers = await db
     .select({
       id: customer.id,
@@ -16,6 +18,65 @@ export const getCustomersValue = async () => {
   const customersValue = mapCustomersValue(customers);
 
   return customersValue;
+};
+
+export const getCustomerSegmentation = async () => {
+  const customersValue = await getCustomersValue();
+
+  // Categorize monetary and frequency values using standard deviation
+  const {
+    lows: monetaryLows,
+    average: monetaryAverage,
+    highs: monetaryHighs,
+  } = categorizeByStandardDeviation(
+    customersValue.map((customer) => customer.monetary ?? 0),
+  );
+
+  const { average: frequencyAverage, highs: frequencyHighs } =
+    categorizeByStandardDeviation(
+      customersValue.map((customer) => customer.frequency ?? 0),
+    );
+
+  // Define thresholds
+  const AT_RISK_THRESHOLD_DAYS = 30; // Days since last transaction
+  const ONE_TIME_FREQUENCY = 1;
+
+  // Map customers to their segments
+  const customerSegmentation = customersValue.map((customer: CustomerValue) => {
+    const { frequency = 0, monetary = 0, recencyInDays = 0 } = customer;
+
+    // High-value customers
+    if (
+      frequencyHighs.includes(frequency) &&
+      monetaryHighs.includes(monetary)
+    ) {
+      return { ...customer, segment: "High Value" };
+    }
+
+    // At-risk customers
+    if (recencyInDays > AT_RISK_THRESHOLD_DAYS) {
+      return { ...customer, segment: "At Risk" };
+    }
+
+    // One-time buyers
+    if (frequency === ONE_TIME_FREQUENCY) {
+      return { ...customer, segment: "One-Time Buyer" };
+    }
+
+    // Potential growth: Low/average monetary value but moderate frequency
+    if (
+      (monetaryLows.includes(monetary) || monetaryAverage.includes(monetary)) &&
+      frequencyAverage.includes(frequency)
+    ) {
+      return { ...customer, segment: "Potential Growth" };
+    }
+
+    // Default segment for uncategorized customers
+    return { ...customer, segment: "Other" };
+  });
+
+  // Return segmented customers
+  return customerSegmentation.filter(Boolean);
 };
 
 export const mapCustomersValue = (customers: Customer[]) => {
