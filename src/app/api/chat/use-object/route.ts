@@ -4,8 +4,6 @@ import { models } from "@/lib/ai/models";
 import { systemPrompt } from "@/lib/ai/prompts";
 import { auth } from "@/lib/auth";
 import {
-  convertToCoreMessages,
-  type Message,
   streamObject
 } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
