@@ -1,3 +1,4 @@
+import { type MonthlySale } from "@/interface/MonthlySale";
 import { TRPCError } from "@trpc/server";
 import { type CoreMessage } from "ai";
 import { clsx, type ClassValue } from "clsx";
@@ -124,3 +125,24 @@ export const handleTRPCError = (error: unknown) => {
 
   return error;
 };
+
+export const calculatePercentageTrend = (data: MonthlySale[]): number | null => {
+  if (data.length < 2) {
+    return null;
+  }
+
+  // Sort data by month (assuming ISO 8601 format 'YYYY-MM')
+  const sortedData = data.sort(
+    (a, b) => new Date(a.month).getTime() - new Date(b.month).getTime(),
+  );
+
+  const currentMonthSales = sortedData[sortedData.length - 1]!.totalSales;
+  const previousMonthSales = sortedData[sortedData.length - 2]!.totalSales;
+
+  // Calculate percentage trend
+  const percentageChange =
+    ((currentMonthSales - previousMonthSales) / previousMonthSales) * 100;
+
+  // Format the result
+  return percentageChange;
+}

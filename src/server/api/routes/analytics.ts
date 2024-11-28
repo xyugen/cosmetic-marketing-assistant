@@ -69,9 +69,15 @@ export const analyticsRoute = createTRPCRouter({
       }
     }),
   getMonthlySales: protectedProcedure
-    .query(async () => {
+    .input(
+      z.object({
+        months: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
       try {
-        return await getMonthlySales();
+        const { months } = input;
+        return await getMonthlySales({ months });
       } catch (error) {
         if (error instanceof Error) {
           throw handleTRPCError(error);

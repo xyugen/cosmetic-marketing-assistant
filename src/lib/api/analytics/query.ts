@@ -1,4 +1,5 @@
 import type { CustomerValue } from "@/interface/CustomerValue";
+import { type MonthlySale } from "@/interface/MonthlySale";
 import { categorizeByStandardDeviation } from "@/lib/utils";
 import { asc, db, desc, eq, sql } from "@/server/db";
 import {
@@ -138,7 +139,11 @@ export const getTopSpendingCustomers = async (limit = 10) => {
   return topSpendingCustomers;
 };
 
-export const getMonthlySales = async () => {
+export const getMonthlySales = async ({
+  months = 12,
+}: {
+  months?: number;
+}): Promise<MonthlySale[]> => {
   const monthlySales = await db
     .select({
       month:
@@ -158,7 +163,7 @@ export const getMonthlySales = async () => {
     })
     .from(productTransactions)
     .where(
-      sql`datetime(${productTransactions.date}, 'unixepoch') >= datetime('now', '-12 months')`,
+      sql`datetime(${productTransactions.date}, 'unixepoch') >= datetime('now', ${-months + " months"})`,
     )
     .groupBy(
       sql`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`,
