@@ -1,10 +1,11 @@
 import type { CustomerValue } from "@/interface/CustomerValue";
 import { categorizeByStandardDeviation } from "@/lib/utils";
-import { db, eq } from "@/server/db";
+import { asc, db, desc, eq, sql } from "@/server/db";
 import {
   type Customer,
   customer,
   customerLifetimeValue as customerLifetimeValueTable,
+  productTransactions,
 } from "@/server/db/schema";
 
 export const getCustomersValue = async (): Promise<CustomerValue[]> => {
@@ -115,7 +116,7 @@ export const getCustomerLifetimeValue = async () => {
         lastTransactionDate: customer.lastTransactionDate,
         totalTransactions: customer.totalTransactions,
         averageTransactionValue: customer.averageTransactionValue,
-      }
+      },
     })
     .from(customerLifetimeValueTable)
     .innerJoin(customer, () =>
@@ -124,4 +125,49 @@ export const getCustomerLifetimeValue = async () => {
     .execute();
 
   return customerLifetimeValue;
+};
+
+export const getTopSpendingCustomers = async (limit = 10) => {
+  const topSpendingCustomers = await db
+    .select()
+    .from(customer)
+    .orderBy(desc(customer.outstandingBalance))
+    .limit(limit)
+    .execute();
+
+  return topSpendingCustomers;
+};
+
+export const getMonthlySales = async () => {
+  const monthlySales = await db
+    .select({
+      month:
+        sql<string>`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`.as(
+          "month",
+        ),
+      totalSales: sql<number>`SUM(${productTransactions.amount})`.as(
+        "totalSales",
+      ),
+      totalTransactions:
+        sql<number>`COUNT(${productTransactions.transactionNumber})`.as(
+          "totalTransactions",
+        ),
+      totalQuantity: sql<number>`SUM(${productTransactions.quantity})`.as(
+        "totalQuantity",
+      ),
+    })
+    .from(productTransactions)
+    .where(
+      sql`datetime(${productTransactions.date}, 'unixepoch') >= datetime('now', '-12 months')`,
+    )
+    .groupBy(
+      sql`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`,
+    )
+    .orderBy(
+      asc(
+        sql`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`,
+      ),
+    );
+
+  return monthlySales;
 };

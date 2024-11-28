@@ -2,6 +2,8 @@ import {
   getCustomerLifetimeValue,
   getCustomerSegmentation,
   getCustomersValue,
+  getMonthlySales,
+  getTopSpendingCustomers,
 } from "@/lib/api/analytics/query";
 import { getBestSellingProducts, getProduct } from "@/lib/api/product/query";
 import { categorizeByStandardDeviation, handleTRPCError } from "@/lib/utils";
@@ -66,6 +68,16 @@ export const analyticsRoute = createTRPCRouter({
         throw handleTRPCError(error);
       }
     }),
+  getMonthlySales: protectedProcedure
+    .query(async () => {
+      try {
+        return await getMonthlySales();
+      } catch (error) {
+        if (error instanceof Error) {
+          throw handleTRPCError(error);
+        }
+      }
+    }),
   getBestSellingProducts: protectedProcedure
     .input(
       z
@@ -80,7 +92,24 @@ export const analyticsRoute = createTRPCRouter({
     )
     .query(async ({ input }) => {
       try {
-        return await getBestSellingProducts(input.startDate, input.endDate, input.limit);
+        return await getBestSellingProducts(
+          input.startDate,
+          input.endDate,
+          input.limit,
+        );
+      } catch (error) {
+        throw handleTRPCError(error);
+      }
+    }),
+  getTopSpendingCustomers: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      try {
+        return await getTopSpendingCustomers(input.limit);
       } catch (error) {
         throw handleTRPCError(error);
       }
@@ -89,11 +118,11 @@ export const analyticsRoute = createTRPCRouter({
   // getProductTrends: protectedProcedure
   //   .input(
   //     z.object({
-        
+
   //     }),
   //   ).query(async ({ input }) => {
   //     try {
-        
+
   //     } catch (error) {
   //       throw handleTRPCError(error);
   //     }

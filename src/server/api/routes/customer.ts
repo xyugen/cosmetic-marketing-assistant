@@ -30,5 +30,5 @@ export const customerRouter = createTRPCRouter({
     } catch (error) {
       throw handleTRPCError(error);
     }
-  }),
+  })
 });
