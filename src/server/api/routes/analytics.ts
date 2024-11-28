@@ -3,6 +3,7 @@ import {
   getCustomerSegmentation,
   getCustomersValue,
 } from "@/lib/api/analytics/query";
+import { getBestSellingProducts, getProduct } from "@/lib/api/product/query";
 import { categorizeByStandardDeviation, handleTRPCError } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -52,4 +53,49 @@ export const analyticsRoute = createTRPCRouter({
       }
     }
   }),
+  getProduct: protectedProcedure
+    .input(
+      z.object({
+        productName: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      try {
+        return await getProduct(input.productName);
+      } catch (error) {
+        throw handleTRPCError(error);
+      }
+    }),
+  getBestSellingProducts: protectedProcedure
+    .input(
+      z
+        .object({
+          startDate: z.coerce.date(),
+          endDate: z.coerce.date(),
+          limit: z.number().optional(),
+        })
+        .refine(({ startDate, endDate }) => startDate <= endDate, {
+          message: "Start date must be less than or equal to end date",
+        }),
+    )
+    .query(async ({ input }) => {
+      try {
+        return await getBestSellingProducts(input.startDate, input.endDate, input.limit);
+      } catch (error) {
+        throw handleTRPCError(error);
+      }
+    }),
+  // TODO: implement getProductTrends
+  // getProductTrends: protectedProcedure
+  //   .input(
+  //     z.object({
+        
+  //     }),
+  //   ).query(async ({ input }) => {
+  //     try {
+        
+  //     } catch (error) {
+  //       throw handleTRPCError(error);
+  //     }
+  //   }),
 });

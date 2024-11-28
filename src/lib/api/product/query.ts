@@ -1,4 +1,4 @@
-import { db } from "@/server/db";
+import { and, db, desc, eq, gte, lte, sql } from "@/server/db";
 import {
   product as productTable,
   productTransactions,
@@ -45,4 +45,36 @@ export const getAllProducts = async () => {
       });
     }
   }
+};
+
+export const getProduct = async (productName: string) => {
+  const [product] = await db
+    .select()
+    .from(productTable)
+    .where(eq(productTable.productService, productName))
+    .limit(1)
+    .execute();
+  return product;
+};
+
+export const getBestSellingProducts = async (
+  startDate: Date,
+  endDate: Date,
+  limit = 10,
+) => {
+  const bestSellingProducts = await db
+    .select()
+    .from(productTable)
+    .where(
+      and(
+        gte(productTable.lastTransactionDate, startDate),
+        lte(productTable.lastTransactionDate, endDate),
+      ),
+    )
+    .groupBy(productTable.productService)
+    .orderBy(desc(sql<number>`sum(${productTable.totalSales})`))
+    .limit(limit)
+    .execute();
+
+  return bestSellingProducts;
 };
