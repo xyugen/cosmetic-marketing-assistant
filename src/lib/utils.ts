@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { type CoreMessage } from "ai";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -103,4 +104,23 @@ export const categorizeByStandardDeviation = (data: number[]) => {
     average,
     highs,
   };
+};
+
+/**
+ * Handles an error that may be thrown by a tRPC procedure. If the error
+ * is an instance of Error, it is converted to a TRPCError with the
+ * code "INTERNAL_SERVER_ERROR". Otherwise, the error is returned as-is.
+ *
+ * @param error - The error to be handled.
+ * @returns The handled error.
+ */
+export const handleTRPCError = (error: unknown) => {
+  if (error instanceof Error) {
+    return new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: error.message,
+    });
+  }
+
+  return error;
 };
