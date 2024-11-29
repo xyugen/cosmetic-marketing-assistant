@@ -1,15 +1,16 @@
 "use client";
 
-import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { type MonthlySale } from "@/interface/MonthlySale";
-import { format } from "date-fns";
 import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-  YAxis
-} from "recharts";
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { type SalesTrend } from "@/interface/SalesTrend";
+import { format } from "date-fns";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 const chartConfig = {
   totalSales: {
@@ -22,7 +23,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function SalesAnalyticsChart({ data }: { data: MonthlySale[] }) {
+export function SalesAnalyticsChart({ data }: { data: SalesTrend[] }) {
   return (
     <ChartContainer config={chartConfig}>
       <AreaChart
@@ -76,9 +77,11 @@ export function SalesAnalyticsChart({ data }: { data: MonthlySale[] }) {
 
         {/* X-Axis */}
         <XAxis
-          dataKey="month"
+          dataKey="period"
           tickMargin={8}
-          tickFormatter={(value: string) => format(new Date(value), "MMM yy")}
+          tickFormatter={(value: string) =>
+            format(new Date(value), "MMM dd, ’yy")
+          }
         />
 
         <ChartTooltip

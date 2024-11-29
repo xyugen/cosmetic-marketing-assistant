@@ -171,7 +171,7 @@ export const getSalesTrend = async ({
   // Mapping of interval to SQLite date format
   const intervalFormatMap = {
     [Interval.Days]: "%Y-%m-%d",
-    [Interval.Weeks]: "%Y-%W", // Year and ISO week
+    [Interval.Weeks]: "%Y-%m-%d", // Year and ISO week
     [Interval.Months]: "%Y-%m",
     [Interval.Years]: "%Y",
   };

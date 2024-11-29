@@ -76,15 +76,10 @@ export const analyticsRoute = createTRPCRouter({
     }),
   getSalesTrend: protectedProcedure
     .input(
-      z
-        .object({
-          interval: z.nativeEnum(Interval).optional(),
-          value: z.number().optional(),
-        })
-        .refine(
-          ({ value }) => value && value > 0,
-          "Value must be greater than 0",
-        ),
+      z.object({
+        interval: z.nativeEnum(Interval).optional(),
+        value: z.number().optional(),
+      }),
     )
     .query(async ({ input }) => {
       try {
