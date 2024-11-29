@@ -45,7 +45,6 @@ const SalesAnalytics = () => {
           <Input
             type="number"
             className="w-24"
-            defaultValue={numberOfIntervals}
             value={numberOfIntervals}
             onChange={(e) => {
               const newValue = Number(e.target.value);

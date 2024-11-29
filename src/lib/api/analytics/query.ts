@@ -254,3 +254,26 @@ export const getMonthlySales = async ({
 
   return monthlySales;
 };
+
+export const getTransactionsOverview = async () => {
+  const transactionsOverview = await db
+    .select({
+      totalSales: sql<number>`SUM(${productTransactions.amount})`.as(
+        "totalSales",
+      ),
+      averageSales: sql<number>`AVG(${productTransactions.amount})`.as(
+        "averageSales",
+      ),
+      totalTransactions:
+        sql<number>`COUNT(${productTransactions.transactionNumber})`.as(
+          "totalTransactions",
+        ),
+      totalQuantity: sql<number>`SUM(${productTransactions.quantity})`.as(
+        "totalQuantity",
+      ),
+    })
+    .from(productTransactions)
+    .execute();
+
+  return transactionsOverview;
+};

@@ -6,6 +6,7 @@ import {
   getMonthlySales,
   getSalesTrend,
   getTopSpendingCustomers,
+  getTransactionsOverview,
 } from "@/lib/api/analytics/query";
 import {
   getBestSellingProducts,
@@ -155,17 +156,11 @@ export const analyticsRoute = createTRPCRouter({
         throw handleTRPCError(error);
       }
     }),
-  // TODO: implement getProductTrends
-  // getProductTrends: protectedProcedure
-  //   .input(
-  //     z.object({
-
-  //     }),
-  //   ).query(async ({ input }) => {
-  //     try {
-
-  //     } catch (error) {
-  //       throw handleTRPCError(error);
-  //     }
-  //   }),
+  getTransactionsOverview: protectedProcedure.query(async () => {
+    try {
+      return await getTransactionsOverview();
+    } catch (error) {
+      throw handleTRPCError(error);
+    }
+  }),
 });

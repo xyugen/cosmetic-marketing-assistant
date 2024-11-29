@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import SalesAnalytics from "./_components/cards/sales-analytics";
-import TopCard from "./_components/cards/top-card";
+import TopCards from "./_components/cards/top-cards";
 
 export const LoadingCard = () => {
   return (
@@ -26,7 +26,7 @@ const Page = () => {
       </h2>
       <main className="mt-8 h-full flex-1 space-y-6 overflow-y-auto bg-secondary/10">
         <Suspense fallback={<LoadingCard />}>
-          <TopCard />
+          <TopCards />
           <SalesAnalytics />
         </Suspense>
       </main>
