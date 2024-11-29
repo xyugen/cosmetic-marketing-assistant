@@ -6,7 +6,7 @@ const HeroSection = () => {
     <section className="relative hidden size-full overflow-hidden lg:block">
       <div className="flex h-full items-center justify-center bg-gray-100">
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-yellow-600 opacity-70"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 opacity-70"></div>
           <div
             className="absolute inset-0"
             style={{
