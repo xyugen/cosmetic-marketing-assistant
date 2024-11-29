@@ -1,3 +1,4 @@
+import { Interval } from "@/constants/interval";
 import type { CustomerValue } from "@/interface/CustomerValue";
 import { type MonthlySale } from "@/interface/MonthlySale";
 import { categorizeByStandardDeviation } from "@/lib/utils";
@@ -9,6 +10,14 @@ import {
   productTransactions,
 } from "@/server/db/schema";
 
+/**
+ * Retrieves all customers and their associated values for customer segmentation.
+ * Values include customer name, first and last transaction date, total transactions,
+ * and average transaction value.
+ *
+ * @returns An array of CustomerValue objects, each containing the customer's
+ *          id, name, lifetime in days, recency in days, frequency, and monetary.
+ */
 export const getCustomersValue = async (): Promise<CustomerValue[]> => {
   const customers = await db
     .select({
@@ -137,6 +146,75 @@ export const getTopSpendingCustomers = async (limit = 10) => {
     .execute();
 
   return topSpendingCustomers;
+};
+
+/**
+ * Returns sales trend data grouped by the specified interval
+ * @param interval The interval to group the data by. Defaults to months.
+ * @param value The number of intervals to retrieve. Defaults to 12.
+ * @returns An array of objects containing the period, total sales, total transactions, and total quantity for each interval
+ */
+export const getSalesTrend = async ({
+  interval = Interval.Months, // Default to months
+  value = 12, // Default to last 12 intervals
+}: {
+  interval?: Interval;
+  value?: number;
+}): Promise<
+  {
+    period: string;
+    totalSales: number;
+    totalTransactions: number;
+    totalQuantity: number;
+  }[]
+> => {
+  // Mapping of interval to SQLite date format
+  const intervalFormatMap = {
+    [Interval.Days]: "%Y-%m-%d",
+    [Interval.Weeks]: "%Y-%W", // Year and ISO week
+    [Interval.Months]: "%Y-%m",
+    [Interval.Years]: "%Y",
+  };
+
+  // Select the appropriate date format based on the interval
+  const dateFormat = intervalFormatMap[interval];
+  // Build the date interval
+  const dateInterval =
+    interval === Interval.Weeks // if interval is weeks
+      ? -value * 7 + " days"
+      : -value + " " + interval;
+  // Build the query
+  const salesTrend = await db
+    .select({
+      period:
+        sql<string>`strftime(${dateFormat}, datetime(${productTransactions.date}, 'unixepoch'))`.as(
+          "period",
+        ),
+      totalSales: sql<number>`SUM(${productTransactions.amount})`.as(
+        "totalSales",
+      ),
+      totalTransactions:
+        sql<number>`COUNT(${productTransactions.transactionNumber})`.as(
+          "totalTransactions",
+        ),
+      totalQuantity: sql<number>`SUM(${productTransactions.quantity})`.as(
+        "totalQuantity",
+      ),
+    })
+    .from(productTransactions)
+    .where(
+      sql`datetime(${productTransactions.date}, 'unixepoch') >= datetime('now', ${dateInterval})`,
+    )
+    .groupBy(
+      sql`strftime(${dateFormat}, datetime(${productTransactions.date}, 'unixepoch'))`,
+    )
+    .orderBy(
+      asc(
+        sql`strftime(${dateFormat}, datetime(${productTransactions.date}, 'unixepoch'))`,
+      ),
+    );
+
+  return salesTrend;
 };
 
 export const getMonthlySales = async ({

@@ -1,8 +1,10 @@
+import { Interval } from "@/constants/interval";
 import {
   getCustomerLifetimeValue,
   getCustomerSegmentation,
   getCustomersValue,
   getMonthlySales,
+  getSalesTrend,
   getTopSpendingCustomers,
 } from "@/lib/api/analytics/query";
 import {
@@ -70,6 +72,27 @@ export const analyticsRoute = createTRPCRouter({
         return await getProduct(input.productName);
       } catch (error) {
         throw handleTRPCError(error);
+      }
+    }),
+  getSalesTrend: protectedProcedure
+    .input(
+      z
+        .object({
+          interval: z.nativeEnum(Interval).optional(),
+          value: z.number().optional(),
+        })
+        .refine(
+          ({ value }) => value && value > 0,
+          "Value must be greater than 0",
+        ),
+    )
+    .query(async ({ input }) => {
+      try {
+        return await getSalesTrend(input);
+      } catch (error) {
+        if (error instanceof Error) {
+          throw handleTRPCError(error);
+        }
       }
     }),
   getMonthlySales: protectedProcedure
