@@ -57,7 +57,7 @@ export const getProduct = async (productName: string) => {
   return product;
 };
 
-export const getBestSellingProducts = async (
+export const getBestSellingProductsBetweenDates = async (
   startDate: Date,
   endDate: Date,
   limit = 10,
@@ -71,6 +71,18 @@ export const getBestSellingProducts = async (
         lte(productTable.lastTransactionDate, endDate),
       ),
     )
+    .groupBy(productTable.productService)
+    .orderBy(desc(sql<number>`sum(${productTable.totalSales})`))
+    .limit(limit)
+    .execute();
+
+  return bestSellingProducts;
+};
+
+export const getBestSellingProducts = async (limit = 10) => {
+  const bestSellingProducts = await db
+    .select()
+    .from(productTable)
     .groupBy(productTable.productService)
     .orderBy(desc(sql<number>`sum(${productTable.totalSales})`))
     .limit(limit)

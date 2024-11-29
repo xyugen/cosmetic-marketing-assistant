@@ -5,7 +5,11 @@ import {
   getMonthlySales,
   getTopSpendingCustomers,
 } from "@/lib/api/analytics/query";
-import { getBestSellingProducts, getProduct } from "@/lib/api/product/query";
+import {
+  getBestSellingProducts,
+  getBestSellingProductsBetweenDates,
+  getProduct,
+} from "@/lib/api/product/query";
 import { categorizeByStandardDeviation, handleTRPCError } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -86,6 +90,19 @@ export const analyticsRoute = createTRPCRouter({
     }),
   getBestSellingProducts: protectedProcedure
     .input(
+      z.object({
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      try {
+        return await getBestSellingProducts(input.limit);
+      } catch (error) {
+        throw handleTRPCError(error);
+      }
+    }),
+  getBestSellingProductsBetweenDates: protectedProcedure
+    .input(
       z
         .object({
           startDate: z.coerce.date(),
@@ -98,7 +115,7 @@ export const analyticsRoute = createTRPCRouter({
     )
     .query(async ({ input }) => {
       try {
-        return await getBestSellingProducts(
+        return await getBestSellingProductsBetweenDates(
           input.startDate,
           input.endDate,
           input.limit,
