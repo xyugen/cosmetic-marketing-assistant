@@ -170,3 +170,16 @@ export const calculateMonthPercentageTrend = (
   // Format the result
   return percentageChange;
 };
+
+export const formatNumberShorthand = (num: number): string => {
+  if (num >= 1_000_000_000) {
+    return `${(num / 1_000_000_000).toLocaleString().replace(/\.0$/, "")}b`;
+  }
+  if (num >= 1_000_000) {
+    return `${(num / 1_000_000).toLocaleString().replace(/\.0$/, "")}m`;
+  }
+  if (num >= 1_000) {
+    return `${(num / 1_000).toLocaleString().replace(/\.0$/, "")}k`;
+  }
+  return num.toString();
+};

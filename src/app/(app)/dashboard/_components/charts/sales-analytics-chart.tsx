@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { type SalesTrend } from "@/interface/SalesTrend";
+import { formatNumberShorthand } from "@/lib/utils";
 import { format } from "date-fns";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
@@ -28,7 +29,7 @@ export function SalesAnalyticsChart({ data }: { data: SalesTrend[] }) {
     <ChartContainer config={chartConfig}>
       <AreaChart
         data={data}
-        margin={{ left: 12, right: 12, top: 16, bottom: 12 }}
+        margin={{ left: 8, right: 8, top: 8, bottom: 8 }}
       >
         <defs>
           <linearGradient id="fillTotalSales" x1="0" y1="0" x2="0" y2="1">
@@ -61,7 +62,7 @@ export function SalesAnalyticsChart({ data }: { data: SalesTrend[] }) {
         {/* Primary Y-Axis for Total Sales */}
         <YAxis
           yAxisId="left"
-          tickFormatter={(value) => `₱${value / 1000}k`}
+          tickFormatter={(value) => `₱${formatNumberShorthand(Number(value))}`}
           width={60}
           stroke="var(--color-totalSales)"
         />
@@ -70,7 +71,7 @@ export function SalesAnalyticsChart({ data }: { data: SalesTrend[] }) {
         <YAxis
           yAxisId="right"
           orientation="right"
-          tickFormatter={(value) => `${value}`}
+          tickFormatter={(value) => `${formatNumberShorthand(Number(value))}`}
           width={60}
           stroke="var(--color-totalQuantity)"
         />
