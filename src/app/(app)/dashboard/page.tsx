@@ -27,7 +27,12 @@ const Page = () => {
       <main className="mt-8 h-full flex-1 space-y-6 overflow-y-auto bg-secondary/10">
         <Suspense fallback={<LoadingCard />}>
           <TopCards />
-          <SalesAnalytics />
+          <div className="grid grid-cols-1 gap-2 lg:grid-cols-3">
+            <SalesAnalytics className="col-span-2" />
+            <div className="col-span-1 size-full rounded-xl border p-4 shadow-xl">
+              Hello
+            </div>
+          </div>
         </Suspense>
       </main>
     </div>

@@ -23,7 +23,7 @@ import { Calendar, TrendingDown, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { SalesAnalyticsChart } from "../charts/sales-analytics-chart";
 
-const SalesAnalytics = () => {
+const SalesAnalytics = ({ className }: { className?: string }) => {
   const [interval, setInterval] = useState<Interval>(Interval.Months);
   const [numberOfIntervals, setNumberOfIntervals] = useState<number>(12);
 
@@ -35,7 +35,7 @@ const SalesAnalytics = () => {
   const percentageTrend = calculatePercentageTrend(salesTrend ?? []);
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader className="flex flex-row justify-between text-lg">
         <div className="w-full">
           <span className="font-semibold">Sales Analytics</span>
