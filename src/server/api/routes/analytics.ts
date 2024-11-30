@@ -1,12 +1,15 @@
 import { Interval } from "@/constants/interval";
 import {
+  predictFutureMonthlySales,
+} from "@/lib/api/analytics/prediction";
+import {
   getCustomerLifetimeValue,
   getCustomerSegmentation,
   getCustomersValue,
   getMonthlySales,
   getSalesTrend,
   getTopSpendingCustomers,
-  getTransactionsOverview,
+  getTransactionsOverview
 } from "@/lib/api/analytics/query";
 import {
   getBestSellingProducts,
@@ -163,4 +166,24 @@ export const analyticsRoute = createTRPCRouter({
       throw handleTRPCError(error);
     }
   }),
+  predictSales: protectedProcedure
+    .input(
+      z.object({
+        months: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      try {
+        const { months } = input;
+
+        const salesTrend = await getSalesTrend({});
+
+        return predictFutureMonthlySales({
+          salesTrend,
+          forecastPeriods: months,
+        });
+      } catch (error) {
+        if (error instanceof Error) throw handleTRPCError(error);
+      }
+    }),
 });

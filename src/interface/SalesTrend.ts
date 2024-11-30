@@ -3,4 +3,5 @@ export interface SalesTrend {
   totalSales: number;
   totalTransactions: number;
   totalQuantity: number;
+  topProduct: string;
 }

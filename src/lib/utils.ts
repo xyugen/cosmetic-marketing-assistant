@@ -183,3 +183,7 @@ export const formatNumberShorthand = (num: number): string => {
   }
   return num.toString();
 };
+
+export const sigmoid = (x: number) => {
+  return 1 / (1 + Math.exp(-x));
+};

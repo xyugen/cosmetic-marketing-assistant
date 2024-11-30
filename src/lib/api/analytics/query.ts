@@ -1,6 +1,7 @@
 import { Interval } from "@/constants/interval";
 import type { CustomerValue } from "@/interface/CustomerValue";
 import { type MonthlySale } from "@/interface/MonthlySale";
+import { type SalesTrend } from "@/interface/SalesTrend";
 import { categorizeByStandardDeviation } from "@/lib/utils";
 import { asc, db, desc, eq, sql } from "@/server/db";
 import {
@@ -160,14 +161,7 @@ export const getSalesTrend = async ({
 }: {
   interval?: Interval;
   value?: number;
-}): Promise<
-  {
-    period: string;
-    totalSales: number;
-    totalTransactions: number;
-    totalQuantity: number;
-  }[]
-> => {
+}): Promise<SalesTrend[]> => {
   // Mapping of interval to SQLite date format
   const intervalFormatMap = {
     [Interval.Days]: "%Y-%m-%d",
@@ -199,6 +193,9 @@ export const getSalesTrend = async ({
         ),
       totalQuantity: sql<number>`SUM(${productTransactions.quantity})`.as(
         "totalQuantity",
+      ),
+      topProduct: sql<string>`MAX(${productTransactions.productService})`.as(
+        "topProduct",
       ),
     })
     .from(productTransactions)
