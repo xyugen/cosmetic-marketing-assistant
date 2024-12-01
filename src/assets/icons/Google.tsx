@@ -1,5 +1,5 @@
 import React, { forwardRef, type SVGProps } from "react";
-import { type Icon } from "./type";
+import { type Icon } from ".";
 
 const MynauiGoogle: Icon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref) => {
