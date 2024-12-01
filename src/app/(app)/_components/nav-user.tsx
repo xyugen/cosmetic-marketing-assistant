@@ -25,6 +25,7 @@ import Link from "next/link";
 export interface UserItem {
   name: string;
   email: string;
+  role: string;
 }
 
 export function NavUser({ user }: { user: UserItem }) {

@@ -17,4 +17,8 @@ export enum PageRoutes {
   ANALYTICS = "/analytics",
   ACCOUNT = "/account",
   SETTINGS = "/settings",
+
+  // ADMIN
+  MANAGE_ACCOUNTS = "/manage-accounts",
+  // AUTHORIZED_EMAILS = "/authorized-emails",
 }

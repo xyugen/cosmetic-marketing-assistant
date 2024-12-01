@@ -115,6 +115,16 @@ const isAuthenticated = t.middleware(async ({ ctx, next }) => {
   return next();
 });
 
+const isAdmin = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session) {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" });
+  }
+  if (ctx.session.user.role?.toLowerCase() !== "admin") {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authorized" });
+  }
+  return next();
+});
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -127,3 +137,5 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(isAuthenticated);
+
+export const adminProcedure = t.procedure.use(timingMiddleware).use(isAdmin);
