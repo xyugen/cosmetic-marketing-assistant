@@ -6,7 +6,9 @@ import { sql } from "drizzle-orm";
 export const user = createTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  email: text("email").notNull(),
+  email: text("email")
+    .notNull()
+    .references(() => authorizedEmail.email, { onDelete: "cascade" }),
   emailVerified: integer("emailVerified", { mode: "boolean" }),
   createdAt: integer("createdAt", { mode: "timestamp" })
     .notNull()
@@ -46,4 +48,10 @@ export const verification = createTable("verification", {
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
+});
+
+// Authorized Email Table - This is used to store authorized emails for a user before they can create an account
+export const authorizedEmail = createTable("authorized_email", {
+  id: integer("id").primaryKey(),
+  email: text("email").notNull().unique(),
 });
