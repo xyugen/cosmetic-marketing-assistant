@@ -67,12 +67,12 @@ export const getCustomerSegmentation = async () => {
       frequencyHighs.includes(frequency) &&
       monetaryHighs.includes(monetary)
     ) {
-      return { ...customer, segment: "High Value" };
+      return { ...customer, segment: "High-Value" };
     }
 
     // At-risk customers
     if (recencyInDays > AT_RISK_THRESHOLD_DAYS) {
-      return { ...customer, segment: "At Risk" };
+      return { ...customer, segment: "At-Risk" };
     }
 
     // One-time buyers
