@@ -1,8 +1,6 @@
 import { PageRoutes } from "@/constants/page-routes";
 import { type Metadata } from "next";
 import Link from "next/link";
-import OrDivider from "../_components/or-divider";
-import SocialsAuth from "../_components/socials-auth";
 import SignUpForm from "./_components/form";
 
 export const metadata: Metadata = {
@@ -30,9 +28,9 @@ const Page = () => {
 
         <SignUpForm />
 
-        <OrDivider />
+        {/* <OrDivider /> */}
 
-        <SocialsAuth />
+        {/* <SocialsAuth /> */}
       </div>
     </section>
   );

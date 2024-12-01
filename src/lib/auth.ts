@@ -33,10 +33,10 @@ export const auth = betterAuth({
       });
     },
   },
-  socialProviders: {
-    facebook: {
-      clientId: env.FACEBOOK_APP_ID,
-      clientSecret: env.FACEBOOK_APP_SECRET,
-    }
-  }
+  // socialProviders: {
+  //   facebook: {
+  //     clientId: env.FACEBOOK_APP_ID,
+  //     clientSecret: env.FACEBOOK_APP_SECRET,
+  //   }
+  // }
 });
