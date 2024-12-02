@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@/components/theme/theme-provider";
 import {
   SidebarInset,
   SidebarProvider,
@@ -20,25 +19,18 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      {/* the flex-col md:flex-row is fix for responsive sidebar */}
-      <SidebarProvider className="max-h-screen flex-col md:flex-row">
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-4">
-              <SidebarTrigger className="-ml-1" />
-            </div>
-          </header>
-          <div className="overflow-y-auto">{children}</div>
-        </SidebarInset>
-      </SidebarProvider>
-    </ThemeProvider>
+    // the flex-col md:flex-row is fix for responsive sidebar
+    <SidebarProvider className="max-h-screen flex-col md:flex-row">
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+          </div>
+        </header>
+        <div className="overflow-y-auto">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 };
 
