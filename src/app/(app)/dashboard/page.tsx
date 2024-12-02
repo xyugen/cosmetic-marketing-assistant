@@ -1,12 +1,7 @@
 import Header from "@/components/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -15,7 +10,7 @@ import {
   Package,
   ShoppingCart,
   TrendingDown,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 import { Suspense } from "react";
 import CustomerRetention from "./_components/cards/customer-retention";
@@ -102,6 +97,7 @@ const Page = () => {
             {/* Customer Retention Section */}
             <CustomerRetention className="col-span-1 w-full" />
 
+            {/* Recent Transactions Section */}
             <RecentTransactions className="relative col-span-2 row-span-2 max-h-72 overflow-y-auto" />
 
             {/* New Customers Section */}

@@ -1,5 +1,3 @@
-"use client";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,11 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { api } from "@/trpc/react";
+import { api } from "@/trpc/server";
 import { format } from "date-fns";
 
-const RecentTransactions = ({ className }: { className?: string }) => {
-  const { data } = api.product.getRecentProductTransactions.useQuery({});
+const RecentTransactions = async ({ className }: { className?: string }) => {
+  const recentProductTransactions =
+    await api.product.getRecentProductTransactions({});
 
   return (
     <Card className={className}>
@@ -25,7 +24,7 @@ const RecentTransactions = ({ className }: { className?: string }) => {
       <CardContent>
         <ScrollArea>
           <div className="space-y-4">
-            {data?.map((transaction) => (
+            {recentProductTransactions?.map((transaction) => (
               <div
                 key={transaction.id}
                 className="flex items-center justify-between"

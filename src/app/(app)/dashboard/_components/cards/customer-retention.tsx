@@ -1,13 +1,11 @@
-"use client";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { api } from "@/trpc/react";
+import { api } from "@/trpc/server";
 import { Users } from "lucide-react";
 import React from "react";
 
-const CustomerRetention = ({ className }: { className?: string }) => {
-  const { data } = api.analytics.getCustomerGrowthRate.useQuery();
+const CustomerRetention = async ({ className }: { className?: string }) => {
+  const customerGrowthRate = await api.analytics.getCustomerGrowthRate();
 
   return (
     <Card className={className}>
@@ -18,8 +16,10 @@ const CustomerRetention = ({ className }: { className?: string }) => {
         <Users className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{data?.growthRate}%</div>
-        <Progress value={data?.growthRate} className="mt-2" />
+        <div className="text-2xl font-bold">
+          {customerGrowthRate.growthRate}%
+        </div>
+        <Progress value={customerGrowthRate.growthRate} className="mt-2" />
       </CardContent>
     </Card>
   );
