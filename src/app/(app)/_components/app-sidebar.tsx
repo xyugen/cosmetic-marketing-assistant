@@ -51,30 +51,12 @@ const data: {
     {
       title: "Products",
       icon: ShoppingBag,
-      items: [
-        {
-          title: "Overview",
-          url: PageRoutes.PRODUCT_OVERVIEW,
-        },
-        {
-          title: "Product List",
-          url: PageRoutes.PRODUCT_LIST,
-        },
-      ],
+      url: PageRoutes.PRODUCT_LIST,
     },
     {
       title: "Customers",
       icon: Users,
-      items: [
-        {
-          title: "Overview",
-          url: PageRoutes.CUSTOMER_OVERVIEW,
-        },
-        {
-          title: "Customer List",
-          url: PageRoutes.CUSTOMER_LIST,
-        },
-      ],
+      url: PageRoutes.CUSTOMER_LIST,
     },
     {
       title: "Analytics",
