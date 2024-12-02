@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
@@ -93,7 +93,7 @@ export function NavUser({ user }: { user: UserItem }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogout}
-              className="text-red-500 focus:text-red-500/80"
+              className="text-destructive focus:text-destructive/80"
             >
               <LogOut />
               Log out
