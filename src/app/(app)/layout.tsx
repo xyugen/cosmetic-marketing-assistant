@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import {
   SidebarInset,
   SidebarProvider,
@@ -5,15 +6,9 @@ import {
 } from "@/components/ui/sidebar";
 import { PageRoutes } from "@/constants/page-routes";
 import { auth } from "@/lib/auth";
-import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppSidebar } from "./_components/app-sidebar";
-
-export const metadata: Metadata = {
-  title: "Dashboard - D’Shine",
-  description: "Your AI-driven marketing and customer engagement tool.",
-};
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth.api.getSession({
@@ -25,18 +20,25 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    // the flex-col md:flex-row is fix for responsive sidebar
-    <SidebarProvider className="max-h-screen flex-col md:flex-row">
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-          </div>
-        </header>
-        <div className="overflow-y-auto">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {/* the flex-col md:flex-row is fix for responsive sidebar */}
+      <SidebarProvider className="max-h-screen flex-col md:flex-row">
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+            <div className="flex items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+            </div>
+          </header>
+          <div className="overflow-y-auto">{children}</div>
+        </SidebarInset>
+      </SidebarProvider>
+    </ThemeProvider>
   );
 };
 

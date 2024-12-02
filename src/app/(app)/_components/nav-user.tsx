@@ -85,20 +85,12 @@ export function NavUser({ user }: { user: UserItem }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href={PageRoutes.ACCOUNT}>
-                  <User />
-                  Account
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={PageRoutes.SETTINGS}>
-                  <Cog />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link href={PageRoutes.SETTINGS}>
+                <Cog />
+                Settings
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogout}

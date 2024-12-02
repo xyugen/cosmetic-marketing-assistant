@@ -15,18 +15,17 @@ import { authClient } from "@/lib/auth-client";
 import {
   ChartArea,
   LayoutDashboard,
-  MailCheck,
   Orbit,
   ShoppingBag,
   Sparkles,
-  Users,
+  Users
 } from "lucide-react";
 import { NavAdmin } from "./nav-admin";
 import NavHeader from "./nav-header";
 import { NavMain } from "./nav-main";
+import NavItemsSkeleton from "./nav-main-skeleton";
 import { NavUser, type UserItem } from "./nav-user";
 import NavUserSkeleton from "./nav-user-skeleton";
-import NavItemsSkeleton from "./nav-main-skeleton";
 
 const data: {
   user?: UserItem;
@@ -93,29 +92,7 @@ const data: {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [user, setUser] = React.useState<UserItem | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const session = await authClient.getSession();
-        if (session?.data?.user) {
-          setUser({
-            name: session.data.user.name,
-            email: session.data.user.email,
-            role: session.data.user.role ?? "user",
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch user session:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    void fetchUserData();
-  }, []);
+  const { data: session, isPending } = authClient.useSession();
 
   return (
     <Sidebar variant="inset" collapsible="icon" {...props}>
@@ -123,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavHeader />
       </SidebarHeader>
       <SidebarContent>
-        {loading ? (
+        {isPending ? (
           <>
             <NavItemsSkeleton itemLength={data.navMain.length} />
             <NavItemsSkeleton itemLength={data.navAdmin.length} />
@@ -131,15 +108,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ) : (
           <>
             <NavMain items={data.navMain} />
-            {user?.role === "admin" && <NavAdmin items={data.navAdmin} />}
+            {session?.user?.role === "admin" && (
+              <NavAdmin items={data.navAdmin} />
+            )}
           </>
         )}
       </SidebarContent>
       <SidebarFooter>
-        {loading ? (
+        {isPending ? (
           <NavUserSkeleton />
         ) : (
-          <NavUser user={user ?? { name: "", email: "", role: "" }} />
+          <NavUser
+            user={{
+              name: session?.user?.name || "",
+              email: session?.user?.email || "",
+              role: session?.user?.role ?? "user",
+            }}
+          />
         )}
       </SidebarFooter>
       <SidebarRail />

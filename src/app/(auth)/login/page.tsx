@@ -4,8 +4,7 @@ import Link from "next/link";
 import LoginForm from "./_components/form";
 
 export const metadata: Metadata = {
-  title: "Login - D’Shine",
-  description: "Your AI-driven marketing and customer engagement tool.",
+  title: "Login",
 };
 
 const Page = () => {

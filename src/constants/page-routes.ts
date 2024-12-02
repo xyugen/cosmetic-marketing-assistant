@@ -15,7 +15,7 @@ export enum PageRoutes {
   CUSTOMER_LIST = `${CUSTOMER_OVERVIEW}/list`,
   AI_MARKETING = "/ai-marketing",
   ANALYTICS = "/analytics",
-  ACCOUNT = "/account",
+  // ACCOUNT = "/account",
   SETTINGS = "/settings",
 
   // ADMIN
