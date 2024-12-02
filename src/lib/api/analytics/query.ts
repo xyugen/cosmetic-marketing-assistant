@@ -306,3 +306,30 @@ export const getCustomerRetention = async ({
 
   return customerRetention;
 };
+
+export const getNewCustomers = async ({ months = 12 }: { months?: number }) => {
+  const newCustomers = await db
+    .select({
+      month:
+        sql<string>`strftime('%Y-%m', datetime(${customer.firstTransactionDate}, 'unixepoch'))`.as(
+          "month",
+        ),
+      totalCustomers: sql<number>`COUNT(DISTINCT ${customer.id})`.as(
+        "totalCustomers",
+      ),
+    })
+    .from(customer)
+    .where(
+      sql`datetime(${customer.firstTransactionDate}, 'unixepoch') >= datetime('now', ${-months + " months"})`,
+    )
+    .groupBy(
+      sql`strftime('%Y-%m', datetime(${customer.firstTransactionDate}, 'unixepoch'))`,
+    ) // Group by month
+    .orderBy(
+      asc(
+        sql`strftime('%Y-%m', datetime(${customer.firstTransactionDate}, 'unixepoch'))`,
+      ),
+    );
+
+  return newCustomers;
+};
