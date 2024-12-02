@@ -1,10 +1,10 @@
+import Header from "@/components/header";
 import CustomerDataTable from "./_components/customer-data-table";
-import CustomerListHeader from "./_components/header";
 
 const Page = async () => {
   return (
     <div className="mx-auto w-full px-4 lg:max-w-6xl">
-      <CustomerListHeader />
+      <Header title="Customers" subtitle="Manage your customers" />
       <CustomerDataTable />
     </div>
   );

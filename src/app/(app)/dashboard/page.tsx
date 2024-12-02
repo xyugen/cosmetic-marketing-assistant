@@ -3,6 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import SalesAnalytics from "./_components/cards/sales-analytics";
 import TopCards from "./_components/cards/top-cards";
+import Header from "@/components/header";
 
 export const LoadingCard = () => {
   return (
@@ -21,9 +22,7 @@ export const LoadingCard = () => {
 const Page = () => {
   return (
     <div className="mx-auto w-full px-4 lg:max-w-6xl">
-      <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
-        Dashboard
-      </h2>
+      <Header title="Dashboard" subtitle="Manage your dashboard" />
       <main className="mt-8 h-full flex-1 space-y-6 overflow-y-auto bg-secondary/10">
         <Suspense fallback={<LoadingCard />}>
           <TopCards />

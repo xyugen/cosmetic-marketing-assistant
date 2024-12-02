@@ -18,7 +18,7 @@ const MarketingContent = () => {
         {object?.productMarketing?.text &&
           (isLoading && !object.productMarketing ? (
             <div className="flex flex-col items-center justify-center p-4">
-              <div className="size-16 animate-spin rounded-full border-b-2 border-gray-900" />
+              <div className="size-16 animate-spin rounded-full border-b-2 border-secondary-foreground" />
               <p className="mt-2">Please wait...</p>
             </div>
           ) : (

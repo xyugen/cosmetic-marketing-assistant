@@ -1,26 +1,25 @@
 "use client";
 
-import { CircleUser, Cog, LogOut, User } from "lucide-react";
+import { CircleUser, Cog, LogOut } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/constants/page-routes";
-import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export interface UserItem {
   name: string;
@@ -94,7 +93,7 @@ export function NavUser({ user }: { user: UserItem }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogout}
-              className="text-destructive hover:text-destructive/80"
+              className="text-red-500 focus:text-red-500/80"
             >
               <LogOut />
               Log out
