@@ -1,15 +1,14 @@
 import { Interval } from "@/constants/interval";
-import {
-  predictFutureMonthlySales,
-} from "@/lib/api/analytics/prediction";
+import { predictFutureMonthlySales } from "@/lib/api/analytics/prediction";
 import {
   getCustomerLifetimeValue,
+  getCustomerRetention,
   getCustomerSegmentation,
   getCustomersValue,
   getMonthlySales,
   getSalesTrend,
   getTopSpendingCustomers,
-  getTransactionsOverview
+  getTransactionsOverview,
 } from "@/lib/api/analytics/query";
 import {
   getBestSellingProducts,
@@ -186,4 +185,31 @@ export const analyticsRoute = createTRPCRouter({
         if (error instanceof Error) throw handleTRPCError(error);
       }
     }),
+  getCustomerRetention: protectedProcedure
+    .input(z.object({ months: z.number().optional() }))
+    .query(async ({ input }) => {
+      try {
+        const { months } = input;
+        return await getCustomerRetention({ months });
+      } catch (error) {
+        throw handleTRPCError(error);
+      }
+    }),
+  getCustomerGrowthRate: protectedProcedure.query(async () => {
+    try {
+      const customerRetention = await getCustomerRetention({ months: 2 });
+      if (customerRetention.length < 2) {
+        return { customerRetention, growthRate: 0 };
+      }
+
+      const growthRate =
+        ((customerRetention?.[customerRetention.length - 1]?.totalCustomers -
+          customerRetention?.[0]?.totalCustomers) /
+          customerRetention?.[0]?.totalCustomers) *
+        100;
+      return { customerRetention, growthRate };
+    } catch (error) {
+      throw handleTRPCError(error);
+    }
+  }),
 });

@@ -274,3 +274,35 @@ export const getTransactionsOverview = async () => {
 
   return transactionsOverview;
 };
+
+export const getCustomerRetention = async ({
+  months = 12,
+}: {
+  months?: number;
+}) => {
+  const customerRetention = await db
+    .select({
+      month:
+        sql<string>`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`.as(
+          "month",
+        ),
+      totalCustomers:
+        sql<number>`COUNT(DISTINCT ${productTransactions.customer})`.as(
+          "totalCustomers",
+        ),
+    })
+    .from(productTransactions)
+    .where(
+      sql`datetime(${productTransactions.date}, 'unixepoch') >= datetime('now', ${-months + " months"})`,
+    )
+    .groupBy(
+      sql`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`,
+    ) // Group by month
+    .orderBy(
+      asc(
+        sql`strftime('%Y-%m', datetime(${productTransactions.date}, 'unixepoch'))`,
+      ),
+    );
+
+  return customerRetention;
+};
