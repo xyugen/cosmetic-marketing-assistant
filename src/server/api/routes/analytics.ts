@@ -6,10 +6,9 @@ import {
   getCustomerSegmentation,
   getCustomersValue,
   getMonthlySales,
-  getNewCustomers,
   getSalesTrend,
   getTopSpendingCustomers,
-  getTransactionsOverview,
+  getTransactionsOverview
 } from "@/lib/api/analytics/query";
 import {
   getBestSellingProducts,
@@ -212,19 +211,5 @@ export const analyticsRoute = createTRPCRouter({
     } catch (error) {
       throw handleTRPCError(error);
     }
-  }),
-  getNewCustomers: protectedProcedure
-    .input(
-      z.object({
-        months: z.number().optional(),
-      }),
-    )
-    .query(async ({ input }) => {
-      try {
-        const { months } = input;
-        return await getNewCustomers({ months });
-      } catch (error) {
-        throw handleTRPCError(error);
-      }
-    }),
+  })
 });

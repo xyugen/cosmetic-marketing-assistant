@@ -1,16 +1,12 @@
-"use client";
-
 import Header from "@/components/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -19,15 +15,14 @@ import {
   Package,
   ShoppingCart,
   TrendingDown,
-  TrendingUp,
-  Users,
+  TrendingUp
 } from "lucide-react";
 import { Suspense } from "react";
+import CustomerRetention from "./_components/cards/customer-retention";
+import NewCustomer from "./_components/cards/new-customer";
+import RecentTransactions from "./_components/cards/recent-transactions";
 import SalesAnalytics from "./_components/cards/sales-analytics";
 import TopCards from "./_components/cards/top-cards";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 
 export const LoadingCard = () => {
   return (
@@ -69,23 +64,6 @@ const Page = () => {
     },
   ];
 
-  const recentTransactions = [
-    {
-      id: 1,
-      customer: "Maria Santos",
-      amount: "₱4,500",
-      product: "GLUTABERRY SULIT PACK",
-      date: "2 hours ago",
-    },
-    {
-      id: 2,
-      customer: "John Doe",
-      amount: "₱3,200",
-      product: "Premium Package",
-      date: "5 hours ago",
-    },
-  ];
-
   return (
     <div className="mx-auto w-full px-4 lg:max-w-6xl">
       <Header title="Dashboard" subtitle="Manage your dashboard" />
@@ -97,7 +75,7 @@ const Page = () => {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:flex md:flex-wrap gap-4 overflow-x-scroll">
+              <div className="grid grid-cols-2 gap-4 overflow-x-scroll md:flex md:flex-wrap">
                 <Button>
                   <Package className="mr-2 h-4 w-4" />
                   Add Product
@@ -122,77 +100,12 @@ const Page = () => {
 
           <div className="grid grid-cols-1 grid-rows-1 gap-4 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3">
             {/* Customer Retention Section */}
-            <Card className="col-span-1 w-full">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Customer Retention
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">15%</div>
-                <Progress value={15} className="mt-2" />
-              </CardContent>
-            </Card>
+            <CustomerRetention className="col-span-1 w-full" />
 
-            <Card className="relative col-span-2 row-span-2 max-h-72 overflow-y-auto">
-              <CardHeader>
-                <CardTitle>Recent Transactions</CardTitle>
-                <CardDescription>Latest sales and activity</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="max-h-72">
-                  <div className="space-y-4">
-                    {recentTransactions.map((transaction) => (
-                      <div
-                        key={transaction.id}
-                        className="flex items-center justify-between"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <Avatar>
-                            <AvatarFallback>
-                              {transaction.customer[0]}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="text-sm font-medium">
-                              {transaction.customer}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {transaction.product}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                          <Badge variant="secondary">
-                            {transaction.amount}
-                          </Badge>
-                          <span className="text-sm text-muted-foreground">
-                            {transaction.date}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+            <RecentTransactions className="relative col-span-2 row-span-2 max-h-72 overflow-y-auto" />
 
             {/* New Customers Section */}
-            <Card className="col-span-1">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  New Customers
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">TEst</div>
-                <p className="text-xs text-muted-foreground">
-                  +12% from last month
-                </p>
-              </CardContent>
-            </Card>
+            <NewCustomer className="col-span-1" />
           </div>
 
           {/* Sales Analytics */}

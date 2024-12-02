@@ -34,6 +34,28 @@ export const getProductTransactions = async () => {
   }
 };
 
+export const getRecentProductTransactions = async ({ limit = 10 }) => {
+  const transactions = await db
+    .select({
+      id: productTransactions.id,
+      transactionNumber: productTransactions.transactionNumber,
+      type: productTransactions.type,
+      date: productTransactions.date,
+      productService: productTransactions.productService,
+      customer: productTransactions.customer,
+      quantity: productTransactions.quantity,
+      salesPrice: productTransactions.salesPrice,
+      amount: productTransactions.amount,
+      balance: productTransactions.balance,
+      description: productTransactions.description,
+    })
+    .from(productTransactions)
+    .orderBy(desc(productTransactions.date))
+    .limit(limit);
+
+  return transactions;
+};
+
 export const getAllProducts = async () => {
   try {
     return await db.select().from(productTable);
