@@ -33,8 +33,8 @@ export const uploadCSV = async ({ file }: { file: File }) => {
     const invalidRows = await parseCsvAndUpdateDb(csvText, db);
 
     // Sync tables
-    await syncProductTable({ lastImportDate: new Date() });
     await syncCustomerTable({ lastImportDate: new Date() });
+    await syncProductTable({ lastImportDate: new Date() });
     await syncCustomerLifetimeValueTable();
 
     return {

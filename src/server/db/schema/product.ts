@@ -11,7 +11,7 @@ export const product = createTable("product", {
   totalTransactions: integer("total_transactions").notNull().default(0),
   averagePrice: integer("average_price").notNull().default(0),
   lastTransactionDate: integer("last_transaction_date", { mode: "timestamp" }),
-  topCustomer: text("top_customer").references(() => customer.name),
+  topCustomer: text("top_customer"),
   description: text("description"),
 });
 
