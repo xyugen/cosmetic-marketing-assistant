@@ -74,10 +74,7 @@ export const parseCsvAndUpdateDb = async (
               transactionNumber: rowData["Transaction No"],
               type: rowData["Transaction Type"],
               date: new Date(rowData.Date),
-              productService: rowData["Product/Service"].replace(
-                "(deleted)",
-                "",
-              ),
+              productService: rowData["Product/Service"],
               customer: rowData.Customer,
               quantity: Number(rowData.Quantity),
               salesPrice: Number(rowData["Sales Price"]),
