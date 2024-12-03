@@ -16,6 +16,7 @@ import NewCustomer from "./_components/cards/new-customer";
 import RecentTransactions from "./_components/cards/recent-transactions";
 import SalesAnalytics from "./_components/cards/sales-analytics";
 import TopCards from "./_components/cards/top-cards";
+import { ChatInterface } from "../ai-assistant/_components/chat-interface";
 
 const Page = () => {
   const lowStockItems = [
@@ -48,7 +49,7 @@ const Page = () => {
       <Header title="Dashboard" subtitle="Manage your dashboard" />
       <main className="mt-8 h-full flex-1 space-y-6 overflow-y-auto bg-secondary/10">
         {/* Quick Actions */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
@@ -72,7 +73,7 @@ const Page = () => {
               </Button>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <TopCards />
 
@@ -92,52 +93,13 @@ const Page = () => {
           <SalesAnalytics className="col-span-2" />
 
           {/* AI Insights & Alerts Section */}
-          <Card className="relative max-h-fit overflow-y-auto">
-            <Tabs defaultValue="insights" className="h-full">
-              <CardHeader className="sticky top-0 z-10 bg-background">
-                <div className="flex items-center justify-between">
-                  <CardTitle>Insights & Alerts</CardTitle>
-                  <TabsList>
-                    <TabsTrigger value="insights">AI Insights</TabsTrigger>
-                    <TabsTrigger value="alerts">Alerts</TabsTrigger>
-                  </TabsList>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <TabsContent value="insights" className="mt-0">
-                  <div className="space-y-4">
-                    {aiInsights.map((insight, i) => (
-                      <Alert key={i}>
-                        <TrendingUp className="h-4 w-4" />
-                        <AlertTitle>
-                          {insight.type === "marketing"
-                            ? "Marketing Suggestion"
-                            : "Demand Forecast"}
-                        </AlertTitle>
-                        <AlertDescription>
-                          {insight.type === "marketing"
-                            ? insight.suggestion
-                            : insight.prediction}
-                        </AlertDescription>
-                      </Alert>
-                    ))}
-                  </div>
-                </TabsContent>
-                <TabsContent value="alerts" className="mt-0">
-                  <div className="space-y-4">
-                    {lowStockItems.map((item) => (
-                      <Alert key={item.id} variant="destructive">
-                        <TrendingDown className="h-4 w-4" />
-                        <AlertTitle>Low Stock Alert</AlertTitle>
-                        <AlertDescription>
-                          {item.name} is running low ({item.quantity} remaining)
-                        </AlertDescription>
-                      </Alert>
-                    ))}
-                  </div>
-                </TabsContent>
-              </CardContent>
-            </Tabs>
+          <Card className="col-span-1">
+            <CardHeader className="bg-secondary rounded-t-xl">
+              <CardTitle>AI Assistant</CardTitle>
+            </CardHeader>
+            <CardContent className="max-h-[500px] overflow-y-auto">
+              <ChatInterface />
+            </CardContent>
           </Card>
         </div>
       </main>

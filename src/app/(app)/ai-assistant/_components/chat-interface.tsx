@@ -98,7 +98,7 @@ export function ChatInterface() {
             e.preventDefault();
             await sendMessage();
           }}
-          className="flex w-2/3 items-center space-x-2"
+          className="flex w-full items-center space-x-2"
         >
           <Input
             placeholder="Ask about your analytics data..."
