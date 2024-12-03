@@ -1,6 +1,3 @@
-"use client";
-// TODO: remove use client
-
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Card,
@@ -10,12 +7,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { api } from "@/trpc/react";
+import { api } from "@/trpc/server";
 import { Users } from "lucide-react";
 
-const CustomerRetention = () => {
-  const { data: customerGrowthRate } =
-    api.analytics.getCustomerGrowthRate.useQuery();
+const CustomerRetention = async () => {
+  const customerGrowthRate = await api.analytics.getCustomerGrowthRate();
 
   return (
     <Card>
