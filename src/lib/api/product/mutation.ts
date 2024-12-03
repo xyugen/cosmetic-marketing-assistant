@@ -1,11 +1,14 @@
-import { count, db, gte, inArray, max, sql } from "@/server/db";
+import { count, db, eq, gte, inArray, max, sql } from "@/server/db";
 import {
   type InsertProductTransaction,
   product as productTable,
   productTransactions,
 } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
-import { syncCustomerLifetimeValueTable, syncCustomerTable } from "../customer/mutation";
+import {
+  syncCustomerLifetimeValueTable,
+  syncCustomerTable,
+} from "../customer/mutation";
 import { parseCsvAndUpdateDb } from "../parseCSV";
 
 export const uploadCSV = async ({ file }: { file: File }) => {
@@ -160,4 +163,8 @@ export const syncProductTable = async ({
         message: error.message,
       });
   }
+};
+
+export const deleteProductTransaction = async ({ id }: { id: number }) => {
+  await db.delete(productTransactions).where(eq(productTransactions.id, id));
 };
