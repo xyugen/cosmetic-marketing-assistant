@@ -75,7 +75,7 @@ export function ChatInterface() {
                 </div>
               )}
               {message.toolInvocations?.map((toolInvocation) => (
-                <div className="mt-2 flex w-full items-center space-x-2">
+                <div className="mt-2 flex w-full items-center space-x-2" key={toolInvocation.toolCallId}>
                   <div className="flex items-center space-x-2 bg-primary rounded-sm p-2">
                     <Wrench className="size-4 text-primary-foreground" />
                     <span className="text-sm font-medium text-primary-foreground">

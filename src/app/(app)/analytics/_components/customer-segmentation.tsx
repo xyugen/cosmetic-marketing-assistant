@@ -38,7 +38,7 @@ const CustomerSegmentation = () => {
   }
 
   // Combine data by segment
-  const combinedData = data.reduce((acc, item) => {
+  const combinedData = data.reduce((acc: { name: string; value: number }[], item) => {
     // If the segment already exists in the accumulator, sum the frequency
     const existing = acc.find((entry) => entry.name === item.segment);
     if (existing) {
