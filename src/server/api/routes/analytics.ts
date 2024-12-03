@@ -1,5 +1,4 @@
 import { Interval } from "@/constants/interval";
-import { predictFutureMonthlySales } from "@/lib/api/analytics/prediction";
 import {
   getCustomerLifetimeValue,
   getCustomerRetention,
@@ -8,7 +7,7 @@ import {
   getMonthlySales,
   getSalesTrend,
   getTopSpendingCustomers,
-  getTransactionsOverview
+  getTransactionsOverview,
 } from "@/lib/api/analytics/query";
 import {
   getBestSellingProducts,
@@ -19,6 +18,7 @@ import { categorizeByStandardDeviation, handleTRPCError } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { computeSingleMovingAverage } from "@/lib/api/analytics/prediction";
 
 export const analyticsRoute = createTRPCRouter({
   segregateData: protectedProcedure
@@ -165,26 +165,28 @@ export const analyticsRoute = createTRPCRouter({
       throw handleTRPCError(error);
     }
   }),
-  predictSales: protectedProcedure
-    .input(
-      z.object({
-        months: z.number().optional(),
-      }),
-    )
-    .query(async ({ input }) => {
-      try {
-        const { months } = input;
+  predictSales: protectedProcedure.query(async () => {
+    try {
+      const salesTrend = await getSalesTrend({ value: 6 });
 
-        const salesTrend = await getSalesTrend({});
+      const lastDate = new Date(
+        salesTrend[salesTrend.length - 1]?.period ?? Date.now(),
+      );
+      const nextMonth = new Date(
+        lastDate.setMonth(lastDate.getMonth() + 1),
+      ).toLocaleString("en-CA", { year: "numeric", month: "2-digit" });
 
-        return predictFutureMonthlySales({
-          salesTrend,
-          forecastPeriods: months,
-        });
-      } catch (error) {
-        if (error instanceof Error) throw handleTRPCError(error);
-      }
-    }),
+      return [
+        ...salesTrend,
+        {
+          period: nextMonth,
+          totalSales: computeSingleMovingAverage(salesTrend),
+        },
+      ];
+    } catch (error) {
+      if (error instanceof Error) throw handleTRPCError(error);
+    }
+  }),
   getCustomerRetention: protectedProcedure
     .input(z.object({ months: z.number().optional() }))
     .query(async ({ input }) => {
@@ -203,13 +205,14 @@ export const analyticsRoute = createTRPCRouter({
       }
 
       const growthRate =
-        ((customerRetention?.[customerRetention.length - 1]?.totalCustomers -
-          customerRetention?.[0]?.totalCustomers) /
-          customerRetention?.[0]?.totalCustomers) *
+        (((customerRetention?.[customerRetention.length - 1]?.totalCustomers ??
+          0) -
+          (customerRetention?.[0]?.totalCustomers ?? 0)) /
+          (customerRetention?.[0]?.totalCustomers ?? 0)) *
         100;
       return { customerRetention, growthRate };
     } catch (error) {
       throw handleTRPCError(error);
     }
-  })
+  }),
 });

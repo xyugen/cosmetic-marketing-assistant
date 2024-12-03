@@ -39,3 +39,12 @@ export const predictFutureMonthlySales = ({
 
   return futurePredictions;
 };
+
+export const computeSingleMovingAverage = (data: SalesTrend[]): number => {
+  if (data.length === 0) {
+    throw new Error("No data available.");
+  }
+
+  const totalSales = data.reduce((acc, cur) => acc + cur.totalSales, 0);
+  return totalSales / data.length;
+};

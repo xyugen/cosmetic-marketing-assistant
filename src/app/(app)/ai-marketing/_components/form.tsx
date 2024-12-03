@@ -32,6 +32,7 @@ import {
   Sparkles,
   Star,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
@@ -77,12 +78,15 @@ export const tones = [
 ];
 
 const MarketingForm = () => {
+  const searchParams = useSearchParams();
+  const productDescription = searchParams.get("productDescription");
+  const productName = searchParams.get("productName");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      productDescription: "",
+      productDescription: productDescription ?? "",
       emojis: false,
       hashtags: false,
       tone: "natural",
@@ -104,7 +108,7 @@ const MarketingForm = () => {
     try {
       submit({
         message: `
-        Product Name: "Radiant Serum"
+        Product Name: "${productName}"
         Product Description: "${values.productDescription}"
         Emojis: ${values.emojis ? '"Yes"' : '"No"'}
         Hashtags: ${values.hashtags ? '"Yes"' : '"No"'}
