@@ -81,8 +81,12 @@ const SalesAnalytics = ({ className }: { className?: string }) => {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          {isLoading || !percentageTrend ? (
+          {isLoading ? (
             <Skeleton className="h-6 w-56 animate-pulse rounded-md" />
+          ) : !percentageTrend ? (
+            <>
+              Showing total sales for the last {numberOfIntervals} {interval}
+            </>
           ) : (
             <>
               Trending {percentageTrend > 0 ? "up" : "down"} by{" "}
@@ -97,12 +101,14 @@ const SalesAnalytics = ({ className }: { className?: string }) => {
           )}
         </div>
         <div className="leading-none text-muted-foreground">
-          {isLoading || !percentageTrend ? (
+          {isLoading ? (
             <Skeleton className="h-4 w-64 animate-pulse rounded-md" />
           ) : (
-            <>
-              Showing total sales for the last {numberOfIntervals} {interval}
-            </>
+            !percentageTrend && (
+              <>
+                Showing total sales for the last {numberOfIntervals} {interval}
+              </>
+            )
           )}
         </div>
       </CardFooter>
