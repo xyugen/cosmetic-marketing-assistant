@@ -26,6 +26,7 @@ import { ArrowDown, ArrowUp, TrendingUp, Users } from "lucide-react";
 import { Bar, BarChart } from "recharts";
 import CustomerSegmentation from "./_components/customer-segmentation";
 import SalesForecasting from "./_components/sales-forecasting";
+import CustomerRetention from "./_components/customer-retention";
 
 // Mock data and functions (replace with actual API calls in a real application)
 const predictSales = () => [
@@ -94,31 +95,7 @@ const Page = () => {
 
           <TabsContent value="customers" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Customer Retention</CardTitle>
-                  <CardDescription>
-                    Current customer retention rate
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">
-                    {(getCustomerRetention() * 100).toFixed(1)}%
-                  </div>
-                  <Progress
-                    value={getCustomerRetention() * 100}
-                    className="mt-2"
-                  />
-                  <Alert className="mt-4">
-                    <Users className="h-4 w-4" />
-                    <AlertTitle>AI Recommendation</AlertTitle>
-                    <AlertDescription>
-                      Implement a loyalty program to improve retention rates for
-                      at-risk customers.
-                    </AlertDescription>
-                  </Alert>
-                </CardContent>
-              </Card>
+              <CustomerRetention />
 
               <CustomerSegmentation />
             </div>
