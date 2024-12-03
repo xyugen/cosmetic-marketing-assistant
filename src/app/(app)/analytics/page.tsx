@@ -27,6 +27,7 @@ import { Bar, BarChart } from "recharts";
 import CustomerSegmentation from "./_components/customer-segmentation";
 import SalesForecasting from "./_components/sales-forecasting";
 import CustomerRetention from "./_components/customer-retention";
+import CustomerLifetimeValue from "./_components/customer-lifetime-value";
 
 // Mock data and functions (replace with actual API calls in a real application)
 const predictSales = () => [
@@ -100,34 +101,7 @@ const Page = () => {
               <CustomerSegmentation />
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Customer Lifetime Value (CLV)</CardTitle>
-                <CardDescription>
-                  Average CLV by customer segment
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BarChart className="h-[300px]">
-                  <Bar
-                    data={getCustomerLifetimeValue()}
-                    category="clv"
-                    index="segment"
-                    colors={["blue"]}
-                    valueFormatter={(value) => `$${value}`}
-                    className="h-[300px]"
-                  />
-                </BarChart>
-                <Alert className="mt-4">
-                  <TrendingUp className="h-4 w-4" />
-                  <AlertTitle>AI Recommendation</AlertTitle>
-                  <AlertDescription>
-                    Develop targeted campaigns to move Low-Value customers to
-                    the Medium-Value segment.
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </Card>
+            <CustomerLifetimeValue />
 
             <Card>
               <CardHeader>

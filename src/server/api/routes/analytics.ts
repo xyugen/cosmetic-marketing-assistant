@@ -1,4 +1,5 @@
 import { Interval } from "@/constants/interval";
+import { computeSingleMovingAverage } from "@/lib/api/analytics/prediction";
 import {
   getCustomerLifetimeValue,
   getCustomerRetention,
@@ -18,7 +19,6 @@ import { categorizeByStandardDeviation, handleTRPCError } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { computeSingleMovingAverage } from "@/lib/api/analytics/prediction";
 
 export const analyticsRoute = createTRPCRouter({
   segregateData: protectedProcedure
@@ -54,9 +54,8 @@ export const analyticsRoute = createTRPCRouter({
       }
     }
   }),
-  getCustomerLifetimeValue: protectedProcedure.mutation(async () => {
+  getCustomerLifetimeValue: protectedProcedure.query(async () => {
     try {
-      // await syncCustomerLifetimeValueTable();
       return await getCustomerLifetimeValue();
     } catch (error) {
       if (error instanceof Error) {
