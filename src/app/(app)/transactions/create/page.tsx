@@ -1,5 +1,10 @@
 import CreateProductTransactionForm from "./_components/form";
 import CreateProductTransactionHeader from "./_components/header";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create Transaction",
+};
 
 const Page = () => {
   return (

@@ -1,5 +1,10 @@
 import Header from "@/components/header";
 import MarketingContent from "./_components/marketing-content";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "AI Marketing",
+};
 
 const Page = () => {
   return (

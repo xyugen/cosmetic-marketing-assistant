@@ -1,5 +1,10 @@
 import Header from "@/components/header";
+import { Metadata } from "next";
 import ProductDataTable from "./_components/product-data-table";
+
+export const metadata: Metadata = {
+  title: "Products",
+};
 
 const Page = async () => {
   return (
