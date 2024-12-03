@@ -29,7 +29,7 @@ export const productTransactions = createTable("product_transactions", {
   description: text("description"),
 });
 
-export type Product = InferSelectModel<typeof product>;
+export type Product = InferInsertModel<typeof product>;
 export type ProductTransaction = InferInsertModel<typeof productTransactions>;
 
 export type InsertProduct = InferInsertModel<typeof product>;

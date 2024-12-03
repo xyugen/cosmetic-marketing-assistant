@@ -13,9 +13,7 @@ If the input passes validation, generate content accordingly, ensuring the tone,
 `;
 
 const productMarketingPrompt = `
-Generate a short creative and enticing marketing description for social media based on the given product name and description. Add emojis and hashtags if the user requests them. Highlight the product's key benefits, appeal to the target audience's emotions, and include a call-to-action that encourages engagement or purchase. After the marketing description, provide an image idea that complements the content and aligns with the beauty and cosmetics industry. Use this exact format:  
-
-ImageIdea: <image idea here>.  
+Generate a short creative and enticing marketing description for social media based on the given product name and description. Add emojis and hashtags if the user requests them. Highlight the product's key benefits, appeal to the target audience's emotions, and include a call-to-action that encourages engagement or purchase. After the marketing description, provide an image idea that complements the content and aligns with the beauty and cosmetics industry.
 `;
 
 const customerPromoPrompt = `
