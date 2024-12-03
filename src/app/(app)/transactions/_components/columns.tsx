@@ -4,6 +4,7 @@ import { DataTableColumnHeader } from "@/components/tables/data-table-column-hea
 import { Checkbox } from "@/components/ui/checkbox";
 import { type ProductTransaction } from "@/server/db/schema";
 import { type ColumnDef } from "@tanstack/react-table";
+import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columns: ColumnDef<ProductTransaction>[] = [
   {
@@ -31,12 +32,18 @@ export const columns: ColumnDef<ProductTransaction>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "transactionNumber",
-    header: () => <div className="min-w-28">Transaction No.</div>,
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("transactionNumber")}</div>
-    ),
+    accessorKey: "id",
+    header: "ID",
+    enableSorting: false,
+    enableHiding: false,
   },
+  // {
+  //   accessorKey: "transactionNumber",
+  //   header: () => <div className="min-w-28">Transaction No.</div>,
+  //   cell: ({ row }) => (
+  //     <div className="lowercase">{row.getValue("transactionNumber")}</div>
+  //   ),
+  // },
   {
     accessorKey: "type",
     header: () => <div className="min-w-32">Transaction Type</div>,
@@ -136,5 +143,9 @@ export const columns: ColumnDef<ProductTransaction>[] = [
     accessorKey: "description",
     header: "Memo/Description",
     cell: ({ row }) => <div>{row.getValue("description")}</div>,
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];

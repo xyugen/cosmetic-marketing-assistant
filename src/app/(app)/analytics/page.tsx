@@ -16,6 +16,11 @@ import ProductPerformanceMetrics from "./_components/product-performance-metrics
 import ProductsOverview from "./_components/products-overview";
 import SalesForecasting from "./_components/sales-forecasting";
 import TopSpendingCustomers from "./_components/top-spending-customers";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Analytics",
+};
 
 const Page = () => {
   return (

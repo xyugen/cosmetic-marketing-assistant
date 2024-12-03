@@ -1,6 +1,7 @@
 import { createProductTransactionSchema } from "@/app/(app)/transactions/create/_components/schema";
 import {
   createProductTransaction,
+  deleteProductTransaction,
   syncProductTable,
   uploadCSV,
 } from "@/lib/api/product/mutation";
@@ -51,5 +52,16 @@ export const productRouter = createTRPCRouter({
     .input(z.object({ date: z.date() }))
     .mutation(async ({ input }) => {
       return await syncProductTable({ lastImportDate: input.date });
+    }),
+  deleteProductTransaction: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      try {
+        return await deleteProductTransaction({ id: input.id });
+      } catch (error) {
+        if (error instanceof Error) {
+          throw handleTRPCError(error);
+        }
+      }
     }),
 });

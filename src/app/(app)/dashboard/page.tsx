@@ -17,6 +17,11 @@ import RecentTransactions from "./_components/cards/recent-transactions";
 import SalesAnalytics from "./_components/cards/sales-analytics";
 import TopCards from "./_components/cards/top-cards";
 import { ChatInterface } from "../ai-assistant/_components/chat-interface";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 const Page = () => {
   const lowStockItems = [

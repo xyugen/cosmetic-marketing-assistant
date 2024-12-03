@@ -9,6 +9,7 @@ export const getProductTransactions = async () => {
   try {
     const transactions = await db
       .select({
+        id: productTransactions.id,
         transactionNumber: productTransactions.transactionNumber,
         type: productTransactions.type,
         date: productTransactions.date,

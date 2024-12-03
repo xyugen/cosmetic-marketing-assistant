@@ -1,7 +1,11 @@
 import AppearanceSettings from "./_components/appearance";
 import PasswordSettings from "./_components/password";
 import ProfileSettings from "./_components/profile";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Settings",
+};
 
 export default async function Page() {
   return (

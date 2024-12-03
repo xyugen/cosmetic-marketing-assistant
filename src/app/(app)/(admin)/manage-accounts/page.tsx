@@ -1,6 +1,11 @@
 import Header from "@/components/header";
 import AddEmailForm from "./_components/add-email-form";
 import ManageAccountsDataTable from "./_components/manage-accounts-data-table";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Manage Accounts",
+};
 
 const Page = () => {
   return (
