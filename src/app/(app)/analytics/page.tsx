@@ -1,7 +1,6 @@
 "use client";
 
 import Header from "@/components/header";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
@@ -22,35 +20,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowDown, ArrowUp, TrendingUp, Users } from "lucide-react";
-import { Bar, BarChart } from "recharts";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import ProductsOverview from "./_components/best-selling-products";
+import CustomerLifetimeValue from "./_components/customer-lifetime-value";
+import CustomerRetention from "./_components/customer-retention";
 import CustomerSegmentation from "./_components/customer-segmentation";
 import SalesForecasting from "./_components/sales-forecasting";
-import CustomerRetention from "./_components/customer-retention";
-import CustomerLifetimeValue from "./_components/customer-lifetime-value";
-
-// Mock data and functions (replace with actual API calls in a real application)
-const predictSales = () => [
-  { month: "Jan", sales: 1000 },
-  { month: "Feb", sales: 1200 },
-  { month: "Mar", sales: 900 },
-  { month: "Apr", sales: 1500 },
-  { month: "May", sales: 2000 },
-  { month: "Jun", sales: 2200 },
-];
-
-const getCustomerRetention = () => 0.85;
-const getCustomerSegmentation = () => [
-  { segment: "High-Value", percentage: 20 },
-  { segment: "Medium-Value", percentage: 50 },
-  { segment: "Low-Value", percentage: 30 },
-];
-
-const getCustomerLifetimeValue = () => [
-  { segment: "High-Value", clv: 5000 },
-  { segment: "Medium-Value", clv: 2000 },
-  { segment: "Low-Value", clv: 500 },
-];
+import TopSpendingCustomers from "./_components/top-spending-customers";
 
 const getBestSellingProducts = () => [
   { name: "Product A", sales: 500 },
@@ -58,15 +34,6 @@ const getBestSellingProducts = () => [
   { name: "Product C", sales: 300 },
   { name: "Product D", sales: 200 },
   { name: "Product E", sales: 100 },
-];
-
-const getSalesTrend = () => [
-  { month: "Jan", sales: 1000 },
-  { month: "Feb", sales: 1200 },
-  { month: "Mar", sales: 900 },
-  { month: "Apr", sales: 1500 },
-  { month: "May", sales: 2000 },
-  { month: "Jun", sales: 2200 },
 ];
 
 const getTopSpendingCustomers = () => [
@@ -103,77 +70,11 @@ const Page = () => {
 
             <CustomerLifetimeValue />
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Top Spending Customers</CardTitle>
-                <CardDescription>
-                  Leaderboard of high-value customers
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Total Spent</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {getTopSpendingCustomers().map((customer, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{customer.name}</TableCell>
-                        <TableCell>
-                          ${customer.spent.toLocaleString()}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">VIP</Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                <Alert className="mt-4">
-                  <Users className="h-4 w-4" />
-                  <AlertTitle>AI Suggestion</AlertTitle>
-                  <AlertDescription>
-                    Offer exclusive perks or early access to new products for
-                    these top customers to maintain their loyalty.
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </Card>
+            <TopSpendingCustomers />
           </TabsContent>
 
           <TabsContent value="products" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Best-Selling Products</CardTitle>
-                <CardDescription>
-                  Top 5 products by sales volume
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BarChart className="h-[300px]">
-                  <Bar
-                    data={getBestSellingProducts()}
-                    category="sales"
-                    index="name"
-                    colors={["blue"]}
-                    valueFormatter={(value) => `${value} units`}
-                    className="h-[300px]"
-                  />
-                </BarChart>
-                <Alert className="mt-4">
-                  <TrendingUp className="h-4 w-4" />
-                  <AlertTitle>AI Recommendation</AlertTitle>
-                  <AlertDescription>
-                    Consider bundling Product A with Product C to boost sales of
-                    the lower-performing product.
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </Card>
+            <ProductsOverview />
 
             <Card>
               <CardHeader>
