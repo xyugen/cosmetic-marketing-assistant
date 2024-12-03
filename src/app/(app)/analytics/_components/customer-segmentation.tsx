@@ -83,14 +83,14 @@ const CustomerSegmentation = () => {
             <Legend />
           </PieChart>
         </ChartContainer>
-        <Alert className="mt-4">
+        {/* <Alert className="mt-4">
           <TrendingUp className="h-4 w-4" />
           <AlertTitle>AI Insight</AlertTitle>
           <AlertDescription>
             Focus on upselling to Medium-Value customers to increase the
             High-Value segment.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </CardContent>
     </Card>
   );

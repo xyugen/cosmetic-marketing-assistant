@@ -24,14 +24,14 @@ const CustomerRetention = async () => {
           {customerGrowthRate?.growthRate}%
         </div>
         <Progress value={customerGrowthRate?.growthRate} className="mt-2" />
-        <Alert className="mt-4">
+        {/* <Alert className="mt-4">
           <Users className="h-4 w-4" />
           <AlertTitle>AI Recommendation</AlertTitle>
           <AlertDescription>
             Implement a loyalty program to improve retention rates for at-risk
             customers.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </CardContent>
     </Card>
   );

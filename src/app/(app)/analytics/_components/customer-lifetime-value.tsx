@@ -81,14 +81,14 @@ const CustomerLifetimeValue = () => {
         ) : (
           <p>No data available</p>
         )}
-        <Alert className="mt-4">
+        {/* <Alert className="mt-4">
           <TrendingUp className="h-4 w-4" />
           <AlertTitle>AI Recommendation</AlertTitle>
           <AlertDescription>
             Consider using this CLV chart to target high-value customers with
             exclusive offers.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </CardContent>
     </Card>
   );

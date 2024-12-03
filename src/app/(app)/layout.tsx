@@ -28,7 +28,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header>
-        <div className="overflow-y-auto">{children}</div>
+        <div className="overflow-y-auto pb-2">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

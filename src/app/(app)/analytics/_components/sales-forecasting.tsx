@@ -92,14 +92,14 @@ const SalesForecasting = () => {
             />
           </LineChart>
         </ChartContainer>
-        <Alert className="mt-4">
+        {/* <Alert className="mt-4">
           <TrendingUp className="h-4 w-4" />
           <AlertTitle>AI Insight</AlertTitle>
           <AlertDescription>
             Sales are predicted to increase by 20% in the next quarter. Consider
             increasing inventory for top-selling products.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </CardContent>
     </Card>
   );

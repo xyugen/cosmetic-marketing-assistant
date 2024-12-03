@@ -94,14 +94,14 @@ const TopSpendingCustomers = () => {
             )}
           </TableBody>
         </Table>
-        <Alert className="mt-4">
+        {/* <Alert className="mt-4">
           <Users className="h-4 w-4" />
           <AlertTitle>AI Suggestion</AlertTitle>
           <AlertDescription>
             Offer exclusive perks or early access to new products for these top
             customers to maintain their loyalty.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </CardContent>
     </Card>
   );

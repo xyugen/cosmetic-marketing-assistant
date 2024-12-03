@@ -54,7 +54,7 @@ const Page = () => {
           </TabsContent>
         </Tabs>
 
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>AI-Powered Business Recommendations</CardTitle>
             <CardDescription>
@@ -94,7 +94,7 @@ const Page = () => {
             </ul>
             <Button className="mt-4">Generate Detailed Report</Button>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </div>
   );

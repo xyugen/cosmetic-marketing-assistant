@@ -78,14 +78,14 @@ const ProductsOverview = () => {
         ) : (
           <p>No data available</p>
         )}
-        <Alert className="mt-4">
+        {/* <Alert className="mt-4">
           <TrendingUp className="h-4 w-4" />
           <AlertTitle>AI Recommendation</AlertTitle>
           <AlertDescription>
             Consider bundling Product A with Product C to boost sales of the
             lower-performing product.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </CardContent>
     </Card>
   );
