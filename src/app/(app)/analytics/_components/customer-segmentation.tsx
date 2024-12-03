@@ -38,20 +38,23 @@ const CustomerSegmentation = () => {
   }
 
   // Combine data by segment
-  const combinedData = data.reduce((acc: { name: string; value: number }[], item) => {
-    // If the segment already exists in the accumulator, sum the frequency
-    const existing = acc.find((entry) => entry.name === item.segment);
-    if (existing) {
-      existing.value += 1;
-    } else {
-      // If not, add a new entry
-      acc.push({
-        name: item.segment,
-        value: 1,
-      });
-    }
-    return acc;
-  }, []);
+  const combinedData = data.reduce(
+    (acc: { name: string; value: number }[], item) => {
+      // If the segment already exists in the accumulator, sum the frequency
+      const existing = acc.find((entry) => entry.name === item.segment);
+      if (existing) {
+        existing.value += 1;
+      } else {
+        // If not, add a new entry
+        acc.push({
+          name: item.segment,
+          value: 1,
+        });
+      }
+      return acc;
+    },
+    [],
+  );
 
   return (
     <Card>

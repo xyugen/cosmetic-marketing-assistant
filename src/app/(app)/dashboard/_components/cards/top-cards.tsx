@@ -23,9 +23,9 @@ const TopCards = () => {
     {
       icon: User,
       title: "Top Customer",
-      mainData: topSpendingCustomer?.at(0)?.name ?? "",
+      mainData: topSpendingCustomer?.[0]?.name ?? "",
       additionalInfo: `₱${
-        topSpendingCustomer?.at(0)?.outstandingBalance.toLocaleString() ?? 0
+        topSpendingCustomer?.[0]?.outstandingBalance?.toLocaleString() ?? "0"
       } total spend`,
       isLoading: isCustomerLoading,
     },
@@ -33,10 +33,10 @@ const TopCards = () => {
       icon: Package,
       title: "Best Selling Product",
       mainData:
-        bestSellingProducts?.at(0)?.productService.replace("(deleted)", "") ??
+        bestSellingProducts?.[0]?.productService?.replace("(deleted)", "") ??
         "",
       additionalInfo: `₱${
-        bestSellingProducts?.at(0)?.totalSales.toLocaleString() ?? 0
+        bestSellingProducts?.[0]?.totalSales?.toLocaleString() ?? "0"
       } total sales`,
       isLoading: isProductLoading,
     },
@@ -44,10 +44,10 @@ const TopCards = () => {
       icon: ChartNoAxesCombined,
       title: "Revenue",
       mainData: `₱${
-        transactionsOverview?.at(0)?.totalSales.toLocaleString() ?? 0
+        transactionsOverview?.[0]?.totalSales?.toLocaleString() ?? "0"
       }`,
       additionalInfo: `₱${
-        transactionsOverview?.at(0)?.averageSales.toLocaleString() ?? 0
+        transactionsOverview?.[0]?.averageSales?.toLocaleString() ?? "0"
       } average sales`,
       isLoading: isTransactionLoading,
     },

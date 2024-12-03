@@ -22,36 +22,42 @@ const RecentTransactions = async ({ className }: { className?: string }) => {
         <CardDescription>Latest sales and activity</CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea>
-          <div className="space-y-4">
-            {recentProductTransactions?.map((transaction) => (
-              <div
-                key={transaction.id}
-                className="flex items-center justify-between"
-              >
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarFallback>{transaction.customer[0]}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">
-                      {transaction.customer}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {transaction.productService}
-                    </p>
+        {recentProductTransactions?.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No recent transactions.
+          </p>
+        ) : (
+          <ScrollArea>
+            <div className="space-y-4">
+              {recentProductTransactions?.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-4">
+                    <Avatar>
+                      <AvatarFallback>{transaction.customer[0]}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">
+                        {transaction.customer}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {transaction.productService}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <Badge variant="secondary">PHP {transaction.amount}</Badge>
+                    <span className="text-sm text-muted-foreground">
+                      {format(transaction.date, "MM/dd/yyyy")}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <Badge variant="secondary">PHP {transaction.amount}</Badge>
-                  <span className="text-sm text-muted-foreground">
-                    {format(transaction.date, "MM/dd/yyyy")}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
+              ))}
+            </div>
+          </ScrollArea>
+        )}
       </CardContent>
     </Card>
   );

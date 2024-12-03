@@ -30,10 +30,8 @@ const chartConfig = {
 const SalesForecasting = () => {
   const { data } = api.analytics.predictSales.useQuery();
 
-  if (!data) return null;
-
-  const referencePoint = data[data.length - 1];
-  const dataPointsLastElementIndex = data.length - 1;
+  const referencePoint = data?.[data.length - 1];
+  const dataPointsLastElementIndex = (data?.length ?? 0) - 1;
   const indexToStartColouredLineFrom = dataPointsLastElementIndex - 1;
   const cutOff =
     100 -
@@ -50,48 +48,58 @@ const SalesForecasting = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart
-            data={data}
-            margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
-          >
-            <defs>
-              <linearGradient id="gradient" x1="0" y1="0" x2="100%" y2="0">
-                <stop offset="0%" stopColor="hsl(var(--chart-1))" />
-                <stop offset={`${cutOff}%`} stopColor="hsl(var(--chart-1))" />
-                <stop offset={`${cutOff}%`} stopColor="#fddc00" />
-                <stop offset="100%" stopColor="#fddc00" />
-              </linearGradient>
-            </defs>
-            <YAxis
-              tickFormatter={(value: number) => {
-                return `PHP ${formatNumberShorthand(value)}`;
-              }}
-            />
-            <XAxis
-              dataKey="period"
-              tickFormatter={(value: string) =>
-                format(new Date(value), "MMM yyyy")
-              }
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Line
-              type="monotone"
-              dataKey="totalSales"
-              stroke="url(#gradient)"
-              strokeWidth={2}
-              dot={false}
-            />
+        {data && data.length > 0 ? (
+          <ChartContainer config={chartConfig}>
+            <LineChart
+              data={data}
+              margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
+            >
+              <defs>
+                <linearGradient id="gradient" x1="0" y1="0" x2="100%" y2="0">
+                  <stop offset="0%" stopColor="hsl(var(--chart-1))" />
+                  <stop offset={`${cutOff}%`} stopColor="hsl(var(--chart-1))" />
+                  <stop offset={`${cutOff}%`} stopColor="#fddc00" />
+                  <stop offset="100%" stopColor="#fddc00" />
+                </linearGradient>
+              </defs>
+              <YAxis
+                tickFormatter={(value: number) => {
+                  return `PHP ${formatNumberShorthand(value)}`;
+                }}
+              />
+              <XAxis
+                dataKey="period"
+                tickFormatter={(value: string) =>
+                  format(new Date(value), "MMM yyyy")
+                }
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line
+                type="monotone"
+                dataKey="totalSales"
+                stroke="url(#gradient)"
+                strokeWidth={2}
+                dot={false}
+              />
 
-            <ReferenceDot
-              x={referencePoint?.period}
-              y={referencePoint?.totalSales}
-              r={3}
-              fill="#fddc00"
-              stroke={"#fddc00"}
-            />
-          </LineChart>
-        </ChartContainer>
+              <ReferenceDot
+                x={referencePoint?.period}
+                y={referencePoint?.totalSales}
+                r={3}
+                fill="#fddc00"
+                stroke={"#fddc00"}
+              />
+            </LineChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-4">
+            <p className="text-lg font-semibold">No data to forecast yet</p>
+            <p className="text-sm text-gray-600">
+              Please wait until more data is collected.
+            </p>
+          </div>
+        )}
+
         {/* <Alert className="mt-4">
           <TrendingUp className="h-4 w-4" />
           <AlertTitle>AI Insight</AlertTitle>
