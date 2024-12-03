@@ -1,4 +1,4 @@
-import { and, db, desc, eq, gte, lte, sql } from "@/server/db";
+import { and, db, desc, eq, gte, like, lte, sql } from "@/server/db";
 import {
   product as productTable,
   productTransactions,
@@ -77,6 +77,16 @@ export const getProduct = async (productName: string) => {
     .limit(1)
     .execute();
   return product;
+};
+
+export const searchProduct = async (searchTerm: string, limit = 1) => {
+  const products = await db
+    .select()
+    .from(productTable)
+    .where(like(productTable.productService, `%${searchTerm}%`))
+    .limit(limit)
+    .execute();
+  return products;
 };
 
 export const getBestSellingProductsBetweenDates = async (

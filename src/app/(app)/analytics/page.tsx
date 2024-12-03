@@ -9,15 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProductsOverview from "./_components/products-overview";
 import CustomerLifetimeValue from "./_components/customer-lifetime-value";
 import CustomerRetention from "./_components/customer-retention";
 import CustomerSegmentation from "./_components/customer-segmentation";
+import ProductPerformanceMetrics from "./_components/product-performance-metrics";
+import ProductsOverview from "./_components/products-overview";
 import SalesForecasting from "./_components/sales-forecasting";
 import TopSpendingCustomers from "./_components/top-spending-customers";
-import ProductPerformanceMetrics from "./_components/product-performance-metrics";
-import { TextSummary } from "./_components/ai/text-summary";
-import { ChatInterface } from "./_components/ai/chat-interface";
 
 const Page = () => {
   return (
@@ -31,7 +29,6 @@ const Page = () => {
             <TabsTrigger value="sales">Sales Analytics</TabsTrigger>
             <TabsTrigger value="customers">Customer Insights</TabsTrigger>
             <TabsTrigger value="products">Product Performance</TabsTrigger>
-            <TabsTrigger value="ai">AI Insights</TabsTrigger>
           </TabsList>
 
           <TabsContent value="sales" className="space-y-4">
@@ -54,13 +51,6 @@ const Page = () => {
             <ProductsOverview />
 
             <ProductPerformanceMetrics />
-          </TabsContent>
-
-          <TabsContent value="ai" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <TextSummary />
-              <ChatInterface />
-            </div>
           </TabsContent>
         </Tabs>
 

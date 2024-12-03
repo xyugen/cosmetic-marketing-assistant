@@ -56,7 +56,7 @@ export const analyticsRoute = createTRPCRouter({
   }),
   getCustomerLifetimeValue: protectedProcedure.query(async () => {
     try {
-      return await getCustomerLifetimeValue();
+      return await getCustomerLifetimeValue({});
     } catch (error) {
       if (error instanceof Error) {
         throw handleTRPCError(error);

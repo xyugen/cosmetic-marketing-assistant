@@ -13,12 +13,13 @@ import { PageRoutes } from "@/constants/page-routes";
 import type { MainNavItem } from "@/interface/MainNavItem";
 import { authClient } from "@/lib/auth-client";
 import {
+  BotMessageSquare,
   ChartArea,
   LayoutDashboard,
   Orbit,
   ShoppingBag,
   Sparkles,
-  Users
+  Users,
 } from "lucide-react";
 import { NavAdmin } from "./nav-admin";
 import NavHeader from "./nav-header";
@@ -42,6 +43,11 @@ const data: {
       title: "AI Marketing",
       url: PageRoutes.AI_MARKETING,
       icon: Sparkles,
+    },
+    {
+      title: "AI Assistant",
+      url: PageRoutes.AI_ASSISTANT,
+      icon: BotMessageSquare,
     },
     {
       title: "Transactions",

@@ -116,8 +116,16 @@ export const mapCustomersValue = (customers: Customer[]) => {
   return customersValue;
 };
 
-export const getCustomerLifetimeValue = async () => {
-  const customerLifetimeValue = await db
+export const getCustomerLifetimeValue = async ({
+  page,
+  limit,
+  sort,
+}: {
+  page?: number;
+  limit?: number;
+  sort?: "asc" | "desc";
+}) => {
+  const query = db
     .select({
       customerId: customerLifetimeValueTable.customerId,
       lifetimeValue: customerLifetimeValueTable.lifetimeValue,
@@ -132,8 +140,17 @@ export const getCustomerLifetimeValue = async () => {
     .from(customerLifetimeValueTable)
     .innerJoin(customer, () =>
       eq(customer.id, customerLifetimeValueTable.customerId),
-    )
-    .execute();
+    );
+
+  if (page && limit) {
+    query.limit(limit).offset((page - 1) * limit);
+  }
+  if (sort) {
+    const orderFn = sort === "asc" ? asc : desc;
+    query.orderBy(orderFn(customerLifetimeValueTable.lifetimeValue));
+  }
+
+  const customerLifetimeValue = await query.execute();
 
   return customerLifetimeValue;
 };
