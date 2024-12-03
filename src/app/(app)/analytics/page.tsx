@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProductsOverview from "./_components/best-selling-products";
+import ProductsOverview from "./_components/products-overview";
 import CustomerLifetimeValue from "./_components/customer-lifetime-value";
 import CustomerRetention from "./_components/customer-retention";
 import CustomerSegmentation from "./_components/customer-segmentation";
