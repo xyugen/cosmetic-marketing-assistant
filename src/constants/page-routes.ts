@@ -14,7 +14,12 @@ export enum PageRoutes {
   CUSTOMER_OVERVIEW = "/customers",
   CUSTOMER_LIST = `${CUSTOMER_OVERVIEW}/list`,
   AI_MARKETING = "/ai-marketing",
+  AI_ASSISTANT = "/ai-assistant",
   ANALYTICS = "/analytics",
-  ACCOUNT = "/account",
+  // ACCOUNT = "/account",
   SETTINGS = "/settings",
+
+  // ADMIN
+  MANAGE_ACCOUNTS = "/manage-accounts",
+  // AUTHORIZED_EMAILS = "/authorized-emails",
 }

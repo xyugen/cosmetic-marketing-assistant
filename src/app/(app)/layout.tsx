@@ -5,15 +5,9 @@ import {
 } from "@/components/ui/sidebar";
 import { PageRoutes } from "@/constants/page-routes";
 import { auth } from "@/lib/auth";
-import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppSidebar } from "./_components/app-sidebar";
-
-export const metadata: Metadata = {
-  title: "Dashboard - D’Shine",
-  description: "Your AI-driven marketing and customer engagement tool.",
-};
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth.api.getSession({
@@ -34,7 +28,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header>
-        <div className="overflow-y-auto">{children}</div>
+        <div className="overflow-y-auto pb-2">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

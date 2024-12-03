@@ -45,6 +45,21 @@ export const columns: ColumnDef<Customer>[] = [
     ),
   },
   {
+    accessorKey: "firstTransactionDate",
+    header: ({ column }) => (
+      <div className="text-right">
+        <DataTableColumnHeader column={column} title="First Transaction Date" />
+      </div>
+    ),
+    // header: "Date",
+    sortingFn: "datetime",
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("firstTransactionDate"));
+      const formattedDate = date.toLocaleDateString("en-US"); // Customize date format as needed
+      return <div>{formattedDate}</div>;
+    },
+  },
+  {
     accessorKey: "lastTransactionDate",
     header: ({ column }) => (
       <div className="text-right">

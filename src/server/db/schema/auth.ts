@@ -1,13 +1,19 @@
-import { text, integer } from "drizzle-orm/sqlite-core";
+import { type InferInsertModel, sql } from "drizzle-orm";
+import { integer, text } from "drizzle-orm/sqlite-core";
 import { createTable } from "../table";
-import { sql } from "drizzle-orm";
 
 // User Table
 export const user = createTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  email: text("email").notNull(),
+  email: text("email")
+    .notNull()
+    .references(() => authorizedEmail.email, { onDelete: "cascade" }),
   emailVerified: integer("emailVerified", { mode: "boolean" }),
+  role: text("role"),
+  banned: integer("banned", { mode: "boolean" }),
+  banReason: text("banReason"),
+  banExpires: integer("banExpires", { mode: "timestamp" }),
   createdAt: integer("createdAt", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),
@@ -24,6 +30,7 @@ export const session = createTable("session", {
     .references(() => user.id, { onDelete: "cascade" }),
   expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
   ipAddress: text("ipAddress"),
+  impersonatedBy: text("impersonatedBy"),
 });
 
 // Account Table
@@ -47,3 +54,11 @@ export const verification = createTable("verification", {
   value: text("value").notNull(),
   expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
 });
+
+// Authorized Email Table - This is used to store authorized emails for a user before they can create an account
+export const authorizedEmail = createTable("authorized_email", {
+  id: integer("id").primaryKey(),
+  email: text("email").notNull().unique(),
+});
+
+export type AuthorizedEmail = InferInsertModel<typeof authorizedEmail>;

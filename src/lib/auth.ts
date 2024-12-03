@@ -5,8 +5,10 @@ import { sendEmail } from "@/services/email";
 import { verificationLinkEmailTemplate } from "@/templates/email-templates";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
+  trustedOrigins: [env.NEXT_PUBLIC_BETTER_AUTH_URL!],
   database: drizzleAdapter(db, {
     provider: "sqlite",
     schema: {
@@ -32,10 +34,11 @@ export const auth = betterAuth({
       });
     },
   },
-  socialProviders: {
-    facebook: {
-      clientId: env.FACEBOOK_APP_ID,
-      clientSecret: env.FACEBOOK_APP_SECRET,
-    }
-  }
+  plugins: [admin()],
+  // socialProviders: {
+  //   facebook: {
+  //     clientId: env.FACEBOOK_APP_ID,
+  //     clientSecret: env.FACEBOOK_APP_SECRET,
+  //   }
+  // }
 });

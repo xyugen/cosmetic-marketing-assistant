@@ -1,8 +1,10 @@
-import { count, db, gte, inArray, max, sql } from "@/server/db";
+import { count, db, gte, inArray, max, min, sql } from "@/server/db";
 import {
+  customerLifetimeValue as customerLifetimeValueTable,
   customer as customerTable,
   productTransactions,
 } from "@/server/db/schema";
+import { getCustomersValue } from "../analytics/query";
 
 export const syncCustomerTable = async ({
   lastImportDate,
@@ -20,6 +22,7 @@ export const syncCustomerTable = async ({
       name: productTransactions.customer,
       totalTransactions: count(productTransactions.transactionNumber),
       totalQuantityPurchased: sql<number>`sum(${productTransactions.quantity})`,
+      firstTransactionDate: min(productTransactions.date),
       lastTransactionDate: max(productTransactions.date),
       mostPurchasedProductService: sql<string>`max(${productTransactions.productService})`,
       averageTransactionValue: sql<number>`avg(${productTransactions.amount})`,
@@ -42,6 +45,7 @@ export const syncCustomerTable = async ({
             name: customer.name,
             totalTransactions: customer.totalTransactions,
             totalQuantityPurchased: customer.totalQuantityPurchased,
+            firstTransactionDate: customer.firstTransactionDate,
             lastTransactionDate: customer.lastTransactionDate,
             mostPurchasedProductService: customer.mostPurchasedProductService,
             averageTransactionValue: customer.averageTransactionValue,
@@ -52,6 +56,7 @@ export const syncCustomerTable = async ({
             set: {
               totalTransactions: customer.totalTransactions,
               totalQuantityPurchased: customer.totalQuantityPurchased,
+              firstTransactionDate: customer.firstTransactionDate,
               lastTransactionDate: customer.lastTransactionDate,
               mostPurchasedProductService: customer.mostPurchasedProductService,
               averageTransactionValue: customer.averageTransactionValue,
@@ -65,4 +70,29 @@ export const syncCustomerTable = async ({
   }
 
   return { message: "Transactions and customer data synced successfully!" };
+};
+
+export const syncCustomerLifetimeValueTable = async () => {
+  const customerLifetimeValues = await getCustomersValue();
+
+  const mappedCustomerLifetimeValues = customerLifetimeValues.map(
+    (customer) => ({
+      customerId: customer.id!,
+      lifetimeValue:
+        customer.frequency! * customer.monetary! * customer.lifetimeInDays,
+    }),
+  );
+
+  await Promise.all(
+    mappedCustomerLifetimeValues.map(async (customer) => {
+      await db
+        .insert(customerLifetimeValueTable)
+        .values(customer)
+        .onConflictDoUpdate({
+          target: customerLifetimeValueTable.customerId,
+          set: { lifetimeValue: customer.lifetimeValue },
+        })
+        .execute();
+    }),
+  );
 };

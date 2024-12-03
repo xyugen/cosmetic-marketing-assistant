@@ -5,7 +5,7 @@ import {
   productTransactions,
 } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
-import { syncCustomerTable } from "../customer/mutation";
+import { syncCustomerLifetimeValueTable, syncCustomerTable } from "../customer/mutation";
 import { parseCsvAndUpdateDb } from "../parseCSV";
 
 export const uploadCSV = async ({ file }: { file: File }) => {
@@ -32,6 +32,7 @@ export const uploadCSV = async ({ file }: { file: File }) => {
     // Sync tables
     await syncProductTable({ lastImportDate: new Date() });
     await syncCustomerTable({ lastImportDate: new Date() });
+    await syncCustomerLifetimeValueTable();
 
     return {
       success: true,
@@ -72,6 +73,7 @@ export const createProductTransaction = async ({
 
     await syncProductTable({ lastImportDate: new Date(input.date) });
     await syncCustomerTable({ lastImportDate: new Date(input.date) });
+    await syncCustomerLifetimeValueTable();
 
     return {
       message: "Transaction created successfully.",

@@ -1,5 +1,5 @@
 import { forwardRef, type SVGProps } from "react";
-import { type Icon } from "./type";
+import { type Icon } from ".";
 
 export const IconoirFacebook: Icon = forwardRef<
   SVGSVGElement,

@@ -1,7 +1,5 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,15 +15,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import type { MainNavItem } from "@/interface/MainNavItem";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-export interface MainNavItem {
-  title: string;
-  url?: string;
-  icon: LucideIcon;
-  items?: { title: string; url: string }[];
-}
 
 export function NavMain({ items }: { items: MainNavItem[] }) {
   const pathname = usePathname();

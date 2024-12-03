@@ -1,11 +1,10 @@
 "use client";
 
-import { CircleUser, Cog, LogOut, User } from "lucide-react";
+import { CircleUser, Cog, LogOut } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -16,15 +15,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/constants/page-routes";
-import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export interface UserItem {
   name: string;
   email: string;
+  role: string;
 }
 
 export function NavUser({ user }: { user: UserItem }) {
@@ -84,24 +84,16 @@ export function NavUser({ user }: { user: UserItem }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href={PageRoutes.ACCOUNT}>
-                  <User />
-                  Account
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={PageRoutes.SETTINGS}>
-                  <Cog />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link href={PageRoutes.SETTINGS}>
+                <Cog />
+                Settings
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogout}
-              className="text-destructive hover:text-destructive/80"
+              className="text-destructive focus:text-destructive/80"
             >
               <LogOut />
               Log out

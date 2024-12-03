@@ -1,4 +1,4 @@
-import { db } from "@/server/db";
+import { and, db, desc, eq, gte, like, lte, sql } from "@/server/db";
 import {
   product as productTable,
   productTransactions,
@@ -34,6 +34,28 @@ export const getProductTransactions = async () => {
   }
 };
 
+export const getRecentProductTransactions = async ({ limit = 10 }) => {
+  const transactions = await db
+    .select({
+      id: productTransactions.id,
+      transactionNumber: productTransactions.transactionNumber,
+      type: productTransactions.type,
+      date: productTransactions.date,
+      productService: productTransactions.productService,
+      customer: productTransactions.customer,
+      quantity: productTransactions.quantity,
+      salesPrice: productTransactions.salesPrice,
+      amount: productTransactions.amount,
+      balance: productTransactions.balance,
+      description: productTransactions.description,
+    })
+    .from(productTransactions)
+    .orderBy(desc(productTransactions.date))
+    .limit(limit);
+
+  return transactions;
+};
+
 export const getAllProducts = async () => {
   try {
     return await db.select().from(productTable);
@@ -45,4 +67,58 @@ export const getAllProducts = async () => {
       });
     }
   }
+};
+
+export const getProduct = async (productName: string) => {
+  const [product] = await db
+    .select()
+    .from(productTable)
+    .where(eq(productTable.productService, productName))
+    .limit(1)
+    .execute();
+  return product;
+};
+
+export const searchProduct = async (searchTerm: string, limit = 1) => {
+  const products = await db
+    .select()
+    .from(productTable)
+    .where(like(productTable.productService, `%${searchTerm}%`))
+    .limit(limit)
+    .execute();
+  return products;
+};
+
+export const getBestSellingProductsBetweenDates = async (
+  startDate: Date,
+  endDate: Date,
+  limit = 10,
+) => {
+  const bestSellingProducts = await db
+    .select()
+    .from(productTable)
+    .where(
+      and(
+        gte(productTable.lastTransactionDate, startDate),
+        lte(productTable.lastTransactionDate, endDate),
+      ),
+    )
+    .groupBy(productTable.productService)
+    .orderBy(desc(sql<number>`sum(${productTable.totalSales})`))
+    .limit(limit)
+    .execute();
+
+  return bestSellingProducts;
+};
+
+export const getBestSellingProducts = async (limit = 10) => {
+  const bestSellingProducts = await db
+    .select()
+    .from(productTable)
+    .groupBy(productTable.productService)
+    .orderBy(desc(sql<number>`sum(${productTable.totalSales})`))
+    .limit(limit)
+    .execute();
+
+  return bestSellingProducts;
 };
