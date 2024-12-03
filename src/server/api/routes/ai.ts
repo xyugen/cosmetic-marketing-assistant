@@ -48,7 +48,7 @@ export const aiRouter = createTRPCRouter({
         tone: z.string(),
       }),
     )
-    .mutation(async function* ({ ctx, input }) {
+    .mutation(async function* ({ input }) {
       try {
         const content = `
         Product Name: "${input.productName}"

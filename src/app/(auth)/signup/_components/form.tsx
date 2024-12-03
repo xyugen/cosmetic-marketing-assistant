@@ -20,6 +20,7 @@ import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { PageRoutes } from "@/constants/page-routes";
 import { useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -34,10 +35,20 @@ const SignUpForm = () => {
     },
   });
 
+  const authorizedEmailMutation = api.auth.isEmailAuthorized.useMutation();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { fullName, email, password } = values;
     const toastId = toast.loading("Signing up...");
     try {
+      const isEmailAuthorized = await authorizedEmailMutation.mutateAsync({
+        email,
+      });
+
+      if (!isEmailAuthorized) {
+        throw new Error("Email is not authorized");
+      }
+
       const response = await authClient.signUp.email({
         name: fullName,
         email,
@@ -62,8 +73,6 @@ const SignUpForm = () => {
           { id: toastId, duration: 5000 },
         );
       }
-
-      console.log(response.data);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message, { id: toastId });
@@ -96,9 +105,7 @@ const SignUpForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-medium">
-                  Email
-                </FormLabel>
+                <FormLabel className="text-base font-medium">Email</FormLabel>
                 <FormControl>
                   <Input type="email" {...field} required />
                 </FormControl>

@@ -10,24 +10,29 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { PageRoutes } from "@/constants/page-routes";
+import type { MainNavItem } from "@/interface/MainNavItem";
 import { authClient } from "@/lib/auth-client";
 import {
+  BotMessageSquare,
   ChartArea,
   LayoutDashboard,
+  Orbit,
   ShoppingBag,
   Sparkles,
   Users,
 } from "lucide-react";
+import { NavAdmin } from "./nav-admin";
 import NavHeader from "./nav-header";
-import { type MainNavItem, NavMain } from "./nav-main";
+import { NavMain } from "./nav-main";
+import NavItemsSkeleton from "./nav-main-skeleton";
 import { NavUser, type UserItem } from "./nav-user";
 import NavUserSkeleton from "./nav-user-skeleton";
 
-const data: { user?: UserItem; navMain: MainNavItem[] } = {
-  // user: {
-  //   name: "John Doe",
-  //   email: "c0L4e@example.com",
-  // },
+const data: {
+  user?: UserItem;
+  navMain: MainNavItem[];
+  navAdmin: MainNavItem[];
+} = {
   navMain: [
     {
       title: "Dashboard",
@@ -40,36 +45,24 @@ const data: { user?: UserItem; navMain: MainNavItem[] } = {
       icon: Sparkles,
     },
     {
+      title: "AI Assistant",
+      url: PageRoutes.AI_ASSISTANT,
+      icon: BotMessageSquare,
+    },
+    {
+      title: "Transactions",
+      url: PageRoutes.TRANSACTIONS,
+      icon: Orbit,
+    },
+    {
       title: "Products",
       icon: ShoppingBag,
-      items: [
-        {
-          title: "Overview",
-          url: PageRoutes.PRODUCT_OVERVIEW,
-        },
-        {
-          title: "Product List",
-          url: PageRoutes.PRODUCT_LIST,
-        },
-        {
-          title: "Product Transaction",
-          url: PageRoutes.PRODUCT_TRANSACTION,
-        },
-      ],
+      url: PageRoutes.PRODUCT_LIST,
     },
     {
       title: "Customers",
       icon: Users,
-      items: [
-        {
-          title: "Overview",
-          url: PageRoutes.CUSTOMER_OVERVIEW,
-        },
-        {
-          title: "Customer List",
-          url: PageRoutes.CUSTOMER_LIST,
-        },
-      ],
+      url: PageRoutes.CUSTOMER_LIST,
     },
     {
       title: "Analytics",
@@ -77,31 +70,17 @@ const data: { user?: UserItem; navMain: MainNavItem[] } = {
       icon: ChartArea,
     },
   ],
+  navAdmin: [
+    {
+      title: "Manage Accounts",
+      url: PageRoutes.MANAGE_ACCOUNTS,
+      icon: Users,
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [user, setUser] = React.useState<UserItem | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const session = await authClient.getSession();
-        if (session?.data?.user) {
-          setUser({
-            name: session.data.user.name,
-            email: session.data.user.email,
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch user session:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    void fetchUserData();
-  }, []);
+  const { data: session, isPending } = authClient.useSession();
 
   return (
     <Sidebar variant="inset" collapsible="icon" {...props}>
@@ -109,13 +88,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        {isPending ? (
+          <>
+            <NavItemsSkeleton itemLength={data.navMain.length} />
+            <NavItemsSkeleton itemLength={data.navAdmin.length} />
+          </>
+        ) : (
+          <>
+            <NavMain items={data.navMain} />
+            {session?.user?.role === "admin" && (
+              <NavAdmin items={data.navAdmin} />
+            )}
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter>
-        {loading ? (
+        {isPending ? (
           <NavUserSkeleton />
         ) : (
-          <NavUser user={user ?? { name: "", email: "" }} />
+          <NavUser
+            user={{
+              name: session?.user?.name || "",
+              email: session?.user?.email || "",
+              role: session?.user?.role ?? "user",
+            }}
+          />
         )}
       </SidebarFooter>
       <SidebarRail />

@@ -3,18 +3,23 @@ export enum PageRoutes {
   LOGIN = "/login",
   SIGNUP = "/signup",
   DASHBOARD = "/dashboard",
+  TRANSACTIONS = "/transactions",
+  TRANSACTION_CREATE = `${TRANSACTIONS}/create`,
 
   // PRODUCT
-  PRODUCT_OVERVIEW = "/product-overview",
-  PRODUCT_LIST = "/product-list",
-  PRODUCT_TRANSACTION = "/product-transaction",
-  PRODUCT_TRANSACTION_CREATE = "/product-transaction/create",
+  PRODUCT_OVERVIEW = "/products",
+  PRODUCT_LIST = `${PRODUCT_OVERVIEW}/list`,
 
   // CUSTOMER
-  CUSTOMER_OVERVIEW = "/customer-overview",
-  CUSTOMER_LIST = "/customer-list",
+  CUSTOMER_OVERVIEW = "/customers",
+  CUSTOMER_LIST = `${CUSTOMER_OVERVIEW}/list`,
   AI_MARKETING = "/ai-marketing",
+  AI_ASSISTANT = "/ai-assistant",
   ANALYTICS = "/analytics",
-  ACCOUNT = "/account",
+  // ACCOUNT = "/account",
   SETTINGS = "/settings",
+
+  // ADMIN
+  MANAGE_ACCOUNTS = "/manage-accounts",
+  // AUTHORIZED_EMAILS = "/authorized-emails",
 }
