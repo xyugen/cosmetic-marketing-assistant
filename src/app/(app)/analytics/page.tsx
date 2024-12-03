@@ -23,7 +23,8 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowDown, ArrowUp, TrendingUp, Users } from "lucide-react";
-import { Bar, BarChart, Pie, PieChart } from "recharts";
+import { Bar, BarChart } from "recharts";
+import CustomerSegmentation from "./_components/customer-segmentation";
 import SalesForecasting from "./_components/sales-forecasting";
 
 // Mock data and functions (replace with actual API calls in a real application)
@@ -89,33 +90,6 @@ const Page = () => {
 
           <TabsContent value="sales" className="space-y-4">
             <SalesForecasting />
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Sales Growth Rate</CardTitle>
-                <CardDescription>Monthly sales growth trends</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BarChart className="h-[300px]">
-                  <Bar
-                    data={getSalesTrend()}
-                    category="sales"
-                    index="month"
-                    colors={["blue"]}
-                    valueFormatter={(value) => `$${value}`}
-                    className="h-[300px]"
-                  />
-                </BarChart>
-                <Alert className="mt-4">
-                  <TrendingUp className="h-4 w-4" />
-                  <AlertTitle>AI Insight</AlertTitle>
-                  <AlertDescription>
-                    June shows the highest growth rate. Consider replicating
-                    successful strategies from this period in upcoming months.
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="customers" className="space-y-4">
@@ -146,33 +120,7 @@ const Page = () => {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Customer Segmentation</CardTitle>
-                  <CardDescription>
-                    Distribution of customer segments
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <PieChart className="h-[200px]">
-                    <Pie
-                      data={getCustomerSegmentation()}
-                      category="percentage"
-                      index="segment"
-                      valueFormatter={(value) => `${value}%`}
-                      className="h-[200px]"
-                    />
-                  </PieChart>
-                  <Alert className="mt-4">
-                    <TrendingUp className="h-4 w-4" />
-                    <AlertTitle>AI Insight</AlertTitle>
-                    <AlertDescription>
-                      Focus on upselling to Medium-Value customers to increase
-                      the High-Value segment.
-                    </AlertDescription>
-                  </Alert>
-                </CardContent>
-              </Card>
+              <CustomerSegmentation />
             </div>
 
             <Card>
