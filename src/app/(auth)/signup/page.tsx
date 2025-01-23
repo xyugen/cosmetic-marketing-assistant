@@ -9,29 +9,27 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <section className="flex size-full flex-col items-center justify-center overflow-y-auto p-6 lg:p-12">
-      <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-        <h2 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">
-          Create your new account!
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link
-            href={PageRoutes.LOGIN}
-            title="Sign In"
-            className="font-semibold text-foreground transition-all duration-200 hover:underline"
-          >
-            Sign In
-          </Link>
-        </p>
+    <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
+      <h2 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">
+        Create your new account!
+      </h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Already have an account?{" "}
+        <Link
+          href={PageRoutes.LOGIN}
+          title="Sign In"
+          className="font-semibold text-foreground transition-all duration-200 hover:underline"
+        >
+          Sign In
+        </Link>
+      </p>
 
-        <SignUpForm />
+      <SignUpForm />
 
-        {/* <OrDivider /> */}
+      {/* <OrDivider /> */}
 
-        {/* <SocialsAuth /> */}
-      </div>
-    </section>
+      {/* <SocialsAuth /> */}
+    </div>
   );
 };
 

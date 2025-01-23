@@ -1,5 +1,3 @@
-import heroImage from "@/assets/images/hero-image.png";
-import Image from "next/image";
 
 const HeroSection = () => {
   return (
@@ -28,7 +26,7 @@ const HeroSection = () => {
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 right-0 h-2/3 w-4/5">
+          {/* <div className="absolute bottom-0 right-0 h-2/3 w-4/5">
             <Image
               className="object-cover object-left"
               src={heroImage}
@@ -38,7 +36,7 @@ const HeroSection = () => {
               objectPosition="left"
               priority
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

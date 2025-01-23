@@ -5,7 +5,6 @@ import { type Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
 
-import { ThemeProvider } from "@/components/theme/theme-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
@@ -27,16 +26,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextTopLoader color="#3849ff" showSpinner={true} />
-          <Toaster />
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </ThemeProvider>
+        <NextTopLoader color="#3849ff" showSpinner={true} />
+        <Toaster />
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );
